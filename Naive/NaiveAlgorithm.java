@@ -6,7 +6,7 @@ public class NaiveAlgorithm {
     private String Pattern;//строка, содержащая шаблон
 
     //Конструктор
-    Naive(String Text, String Pattern){
+    NaiveAlgorithm(String Text, String Pattern){
         this.Text=Text;
         this.Pattern=Pattern;
     }
