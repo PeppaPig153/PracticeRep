@@ -1,10 +1,11 @@
+import javax.swing.*;
 import java.awt.*;
 
 /**
  * Класс, описывающий абстрактный визуализатор
  */
 public abstract class Visualizable {
-    public abstract void visualize(Graphics2D g2d);
+    public abstract void visualize(int step);
 
     /**
      * Визуализирующая функция для визуализатора алгоритма поиска подстроки в строке
@@ -16,6 +17,12 @@ public abstract class Visualizable {
         this.pattern = pattern;
     }
 
+    public int getStepsNumber() {
+        return stepsNumber;
+    }
+
     protected String text;
     protected String pattern;
+    protected String answer;
+    private int stepsNumber;
 }

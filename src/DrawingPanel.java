@@ -8,17 +8,17 @@ public class DrawingPanel extends JPanel {
         this.visualizable = visualizable;
     }
 
-    public Visualizable getVisualizable() {
+    public Visualizable getVisualization() {
         return visualizable;
     }
 
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2d = (Graphics2D) g;
-//        g2d.drawRect(0,0,100,100);
-        if (visualizable != null) {
-            visualizable.visualize(g2d);
-        }
-    }
+//    @Override
+//    protected void paintComponent(Graphics g) {
+//        super.paintComponent(g);
+//        Graphics2D g2d = (Graphics2D) g;
+////        g2d.drawRect(0,0,100,100);
+//        if (visualizable != null) {
+//            visualizable.visualize(g2d);
+//        }
+//    }
 }
