@@ -19,9 +19,9 @@ public class MainGUI {
         // Добавляем обработчики событий к кнопкам и таймеру
         addActionListeners();
 
-        LabeledString labeledString = new LabeledString("This is a test string", 12, drawingPanel, 20, 20);
+//        LabeledString labeledString = new LabeledString("This is a test string", 12, drawingPanel, 20, 20);
 //        labeledString.addToPanel(drawingPanel);
-        labeledString.setPosition(20,200);
+//        labeledString.setPosition(20,200);
 //        NumeratedString numLabString = new NumeratedString(labeledString.getElementsNumber());
 //        NumeratedString numeratedString = new NumeratedString(new int[] {0, 1, 2, 3, 10, 20}, 12, 20,20);
 //        numeratedString.addToPanel(drawingPanel);
@@ -42,7 +42,7 @@ public class MainGUI {
         drawingPanel.setLayout(null);
         answerLabel = new JLabel("It's an answer!(this text is for testing)");
         drawingPanel.add(answerLabel);
-        answerLabel.setBounds(20, drawingPanel.getBounds().height-20, FRAME_WIDTH-20, 20);
+        answerLabel.setBounds(20, drawingPanel.getBounds().height-40, FRAME_WIDTH-20, 20);
     }
 
 
@@ -56,14 +56,25 @@ public class MainGUI {
                 if (textField.getText().length() == 0 && textField.getText().length() == 0) {
                     // TODO: Выводим сообщение об ошибке
                 } else {
+                    if (drawingPanel.getVisualization() != null) {
+                        // Очищаем окно от прошлой визуализации
+                        drawingPanel.getVisualization().clear();
+                        drawingPanel.revalidate();
+                        drawingPanel.repaint();
+//                        drawingPanel.remove(drawingPanel.getVisualization())
+                    }
+                    currentStep = -1;
                     if (comboBox.getSelectedItem().equals("Naive")) {
                         NaiveVisualization naiveVisualization = new NaiveVisualization(textField.getText(),
                                 patternField.getText(), drawingPanel, answerLabel);
                         drawingPanel.setVisualization(naiveVisualization);
+                        stepsNumber = naiveVisualization.getStepsNumber();
                     } else if (comboBox.getSelectedItem().equals("KMP")) {
                         KMPVisualization kmpVisualization = new KMPVisualization(textField.getText(),
                                 patternField.getText(), drawingPanel, answerLabel);
                         drawingPanel.setVisualization(kmpVisualization);
+                        stepsNumber = kmpVisualization.getStepsNumber();
+                        System.out.println(stepsNumber);
                     }
                     startButton.setEnabled(true);
                     nextButton.setEnabled(true);
@@ -103,15 +114,20 @@ public class MainGUI {
     }
 
     private void update() {
-        checkPrevButton();
-        checkStartNextButtons();
+        updateButtons();
         drawingPanel.getVisualization().visualize(currentStep);
     }
-    // Проверка для кнопки Prev на то, что текущий шаг - первый:
+
+    // Функция, обновляющая кнопки - можем мы их нажимать или нет
+    private void updateButtons() {
+        checkPrevButton();
+        checkStartNextButtons();
+    }
+    // Проверка для кнопки Prev на то, что текущий шаг - первый, если он первый, то нажимать ее нельзя:
     private void checkPrevButton(){
         if (currentStep <= 0 && prevButton.isEnabled())
             prevButton.setEnabled(false);
-        else if (startButton.getText().equals("Start"))
+        else if (currentStep >0 && startButton.getText().equals("Start")) // Если алгоритм не находится в процессе автоматического показа визуализации
             prevButton.setEnabled(true);
     }
     // Проверка для кнопок Next/Start на то, что текущий шаг - последний:
@@ -121,9 +137,10 @@ public class MainGUI {
             startButton.setText("Start");
             startButton.setEnabled(false);
             nextButton.setEnabled(false);
+            timer.stop();
         } else {
-            // TODO
-
+            startButton.setEnabled(true);
+            nextButton.setEnabled(true);
         }
     }
 
