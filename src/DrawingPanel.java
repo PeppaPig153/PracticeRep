@@ -1,5 +1,6 @@
+import Visualizators.Visualizable;
+
 import javax.swing.*;
-import java.awt.*;
 
 public class DrawingPanel extends JPanel {
     Visualizable visualizable;

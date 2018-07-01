@@ -1,7 +1,9 @@
+package CoolStrings;
+
 import javax.swing.*;
 
 /**
- * Класс, реализующий CoolString для последовательности чисел
+ * Класс, реализующий CoolStrings.CoolString для последовательности чисел
  */
 public class NumeratedString extends CoolString {
     public NumeratedString(int[] elements, int elementSize, JPanel panel, int x, int y) {

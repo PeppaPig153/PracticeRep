@@ -1,3 +1,5 @@
+package Visualizators;
+
 import javax.swing.*;
 import java.awt.*;
 
