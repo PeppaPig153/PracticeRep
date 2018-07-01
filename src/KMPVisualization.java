@@ -26,10 +26,10 @@ public class KMPVisualization extends Visualizable {
     public KMPVisualization(String text, String pattern, JPanel panel, JLabel answer/*, JLabel info?? */) {
         super(text, pattern);
         answer.setText("Answer: " + KMPAlgorithm(text, pattern));
-        labeledText = new LabeledString(text, 20, 20, 20);
-        labeledPattern = new LabeledString(pattern, 20, 20, 40);
-        labeledText.addToPanel(panel);
-        labeledPattern.addToPanel(panel);
+        labeledText = new LabeledString(text, 20, panel, 20, 20);
+        labeledPattern = new LabeledString(pattern, 20, panel, 20, 40);
+//        labeledText.addToPanel(panel);
+//        labeledPattern.addToPanel(panel);
     }
 
     private String KMPAlgorithm(String text, String pattern) {
@@ -83,7 +83,7 @@ public class KMPVisualization extends Visualizable {
             builder.append(item);
             builder.append(", ");
         }
-        builder.setLength(builder.length() - 2);
+        builder.delete(builder.length()-2, builder.length());
         return builder.toString();
 
 
@@ -97,7 +97,10 @@ public class KMPVisualization extends Visualizable {
 
     @Override
     public void visualize(int step) {
-
+//        labeledPattern.setX(labeledText.getX() + labeledText.getBasicFontSize()*steps.get(step).getPatternPosition());
+        labeledText.setX(labeledPattern.getX() - labeledText.getBasicFontSize()*steps.get(step).getPatternPosition());
+        labeledText.setColor(steps.get(step).getColor(), steps.get(step).getTextColoredSymbolIndex());
+        labeledPattern.setColor(steps.get(step).getColor(), steps.get(step).getPatternColoredSymbolIndex());
     }
 
     class Step {
@@ -134,15 +137,36 @@ public class KMPVisualization extends Visualizable {
                     return "";
             }
         }
-        public String getColor(){
+
+        public int getColor(){
             switch (typeOfMessage) {
                 case EQUAL_CHARS:
-                    return "GREEN";
+                    return Color.GREEN.getRGB();
                 case NOT_EQUAL_CHARS:
-                    return "RED";
+                    return Color.RED.getRGB();
                 default:
-                    return "BLACK";
+                    return Color.BLACK.getRGB();
             }
+        }
+
+        public int getTextColoredSymbolIndex() {
+            return textColoredSymbolIndex;
+        }
+
+        public int getPatternColoredSymbolIndex() {
+            return patternColoredSymbolIndex;
+        }
+
+        public int getPrefixSymbolFrom() {
+            return prefixSymbolFrom;
+        }
+
+        public int getPrefixSymbolTo() {
+            return prefixSymbolTo;
+        }
+
+        public int getPatternPosition() {
+            return patternPosition;
         }
     }
 }

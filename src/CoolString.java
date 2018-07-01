@@ -5,7 +5,7 @@ import java.awt.*;
  * Интерфейс, описывающий строку из JLabel с одинаковым отступом между символами и возможностью изменения цветов конкретных элементов.
  */
 public abstract class CoolString {
-    public CoolString(int elementsNumber, int elementSize, int x, int y) {
+    public CoolString(int elementsNumber, int elementSize, JPanel panel, int x, int y) {
         this.x = x;
         this.y = y;
         this.basicFontSize = elementSize;
@@ -13,6 +13,7 @@ public abstract class CoolString {
         labels = new JLabel[elementsNumber];
         for (int i = 0; i < elementsNumber; ++i) {
             labels[i] = new JLabel();
+            panel.add(labels[i]);
         }
 
         Font f = new Font("Arial", 1, elementSize);//установка шрифта
