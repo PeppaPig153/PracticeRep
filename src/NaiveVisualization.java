@@ -13,12 +13,10 @@ public class NaiveVisualization extends Visualizable {
     private LabeledString labeledPattern;
 
     public NaiveVisualization(String text, String pattern, JPanel panel, JLabel answer) {
-        super(text, pattern);
+        super(text, pattern, panel);
         answer.setText("Answer: " + NaiveAlgorithm(text, pattern));
         labeledText = new LabeledString(text, 20, panel, 20, 20);
         labeledPattern = new LabeledString(pattern, 20, panel, 20, 40);
-//        labeledText.addToPanel(panel);
-//        labeledPattern.addToPanel(panel);
     }
 
     private String NaiveAlgorithm(String text, String pattern) {
@@ -37,8 +35,20 @@ public class NaiveVisualization extends Visualizable {
     }
 
     @Override
+    public void clear() {
+        labeledPattern.removeFromPanel(getPanel());
+    }
+
+    @Override
     public void visualize(int step) {
         // TODO
+        for (int i = 0; i < labeledText.getElementsNumber(); i++) {
+            labeledText.setColor(steps.get(step).textColors[i], i);
+        }
+        for (int i = 0; i < labeledPattern.getElementsNumber(); i++) {
+            labeledPattern.setColor(steps.get(step).textColors[i], i);
+        }
+        labeledPattern.setX(labeledText.getX()+steps.get(step).patternPosition*labeledText.getElementSize());
     }
 
 

@@ -13,7 +13,8 @@ public class KMPVisualization extends Visualizable {
     // Строки из JLabel для отображения шагов:
     private LabeledString labeledText;
     private LabeledString labeledPattern;
-    private NumeratedString numeratedString;
+//    private NumeratedString numeratedString;
+    private JLabel info;
 
     enum MessageTypes {
         RES_FOUND,
@@ -24,12 +25,21 @@ public class KMPVisualization extends Visualizable {
     };
 
     public KMPVisualization(String text, String pattern, JPanel panel, JLabel answer/*, JLabel info?? */) {
-        super(text, pattern);
+        super(text, pattern, panel);
         answer.setText("Answer: " + KMPAlgorithm(text, pattern));
         labeledText = new LabeledString(text, 20, panel, 20, 20);
         labeledPattern = new LabeledString(pattern, 20, panel, 20, 40);
-//        labeledText.addToPanel(panel);
-//        labeledPattern.addToPanel(panel);
+        info = new JLabel("");
+        panel.add(info);
+        info.setBounds(20, 100, 500, 40);
+        info.setAutoscrolls(true);
+        info.setText("this is info label");
+        stepsNumber = steps.size();
+        for (int i = 0; i < stepsNumber; i++) {
+            System.out.println(steps.get(i).getTextColoredSymbolIndex() + " " + steps.get(i).getPatternColoredSymbolIndex() + " "
+                    + steps.get(i).getPrefixSymbolFrom() + " " + steps.get(i).getPrefixSymbolTo()
+                    + " " + steps.get(i).getPatternPosition() + " " + steps.get(i).getMessage());
+        }
     }
 
     private String KMPAlgorithm(String text, String pattern) {
@@ -61,8 +71,8 @@ public class KMPVisualization extends Visualizable {
             if (pattern.charAt(k) == text.charAt(i)) {
                 k = k + 1;
                 if (k == pattern.length()) {
-                    steps.add(new Step(i,k,0,0,MessageTypes.RES_FOUND,i-k));
-                    steps.add(new Step(i,k,k-1,prefix.get(k - 1),MessageTypes.SHIFT_AFTER_RESULT,i-prefix.get(k-1)));
+                    steps.add(new Step(i,k-1,0,0,MessageTypes.RES_FOUND,i-k+1));
+                    steps.add(new Step(i,k-1,k-1,prefix.get(k - 1),MessageTypes.SHIFT_AFTER_RESULT,i-prefix.get(k-1)));
                     result.add(i + 1 - k);
                     k = prefix.get(k - 1);
 
@@ -83,16 +93,30 @@ public class KMPVisualization extends Visualizable {
             builder.append(item);
             builder.append(", ");
         }
-        builder.delete(builder.length()-2, builder.length());
+        if (!result.isEmpty())
+            builder.delete(builder.length()-2, builder.length());
         return builder.toString();
         
     }
 
     @Override
+    public void clear() {
+        labeledPattern.removeFromPanel(getPanel());
+        labeledText.removeFromPanel(getPanel());
+    }
+
+    @Override
     public void visualize(int step) {
         labeledText.setX(labeledPattern.getX() - labeledText.getBasicFontSize()*steps.get(step).getPatternPosition());
+        // Красим строки полностью в черный:
+        labeledPattern.setColor(Color.BLACK.getRGB(), 0, labeledPattern.getElementsNumber());
+        labeledText.setColor(Color.BLACK.getRGB(), 0, labeledText.getElementsNumber());
+        // Красим необходимые символы в нужный цвет:
         labeledText.setColor(steps.get(step).getColor().getRGB(), steps.get(step).getTextColoredSymbolIndex());
         labeledPattern.setColor(steps.get(step).getColor().getRGB(), steps.get(step).getPatternColoredSymbolIndex());
+        // Устанавливаем сообщение для шага:
+        info.setText(steps.get(step).getMessage());
+        System.out.println(info.getText());
     }
 
     class Step {
