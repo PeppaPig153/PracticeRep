@@ -9,7 +9,7 @@ public class KMPVisualization extends Visualizable {
     // Поле для хранения информации для визуализации шагов
     private ArrayList<Step> steps;
     // Результат вычислений префикс-функции:
-    //private ArrayList<Integer> prefix;
+    private ArrayList<Integer> prefix;
     // Строки из JLabel для отображения шагов:
     private LabeledString labeledText;
     private LabeledString labeledPattern;
@@ -36,7 +36,7 @@ public class KMPVisualization extends Visualizable {
 
 
         //нахождение префикс функции
-        ArrayList<Integer> prefix = new ArrayList<Integer>();
+        prefix = new ArrayList<Integer>();
         prefix.add(new Integer(0));
         for(int i = 1 ; i < text.length() ; ++i){
             Integer k = prefix.get(i-1);
@@ -85,14 +85,7 @@ public class KMPVisualization extends Visualizable {
         }
         builder.setLength(builder.length() - 2);
         return builder.toString();
-
-
-
-        /*
-            TODO: Реализовать эту функцию, выполняющую алгоритм и сохраняющую шаги в массив Step'ов
-            Пример добавления очередного шага: steps.add(new Step(textColoredSymbolIndex, patternColoredSymbolIndex,
-            prefixSymbolFrom, prefixSymbolTo, MessageTypes.EXAMPLE, patternPosition));
-        */
+        
     }
 
     @Override
@@ -109,6 +102,8 @@ public class KMPVisualization extends Visualizable {
         private MessageTypes typeOfMessage;
         private int patternPosition;
 
+
+
         public Step(int textColoredSymbolIndex, int patternColoredSymbolIndex, int prefixSymbolFrom,
                     int prefixSymbolTo, MessageTypes typeOfMessage, int patternPosition) {
             this.textColoredSymbolIndex = textColoredSymbolIndex;
@@ -118,30 +113,51 @@ public class KMPVisualization extends Visualizable {
             this.typeOfMessage = typeOfMessage;
             this.patternPosition = patternPosition;
         }
+
+        public int getPatternColoredSymbolIndex() {
+            return patternColoredSymbolIndex;
+        }
+
+        public int getTextColoredSymbolIndex() {
+            return textColoredSymbolIndex;
+        }
+
+        public int getPatternPosition() {
+            return patternPosition;
+        }
+
+        public int getPrefixSymbolFrom() {
+            return prefixSymbolFrom;
+        }
+
+        public int getPrefixSymbolTo() {
+            return prefixSymbolTo;
+        }
+
         public String getMessage(){
             switch (typeOfMessage){
                 case RES_FOUND:
-                    return "";
+                    return "Все символы совпадают, индекс найденной подстроки " + Integer.toString(textColoredSymbolIndex - patternColoredSymbolIndex);
                 case EQUAL_CHARS:
-                    return "";
+                    return "Символы совпадают, переходим к следующим";
                 case NOT_EQUAL_CHARS:
-                    return "";
+                    return "Символы не совпадают, двигаем строку ";
                 case SHIFT_AFTER_COMPARE:
-                    return "";
+                    return "Следующий символ, который будет сравниваться из шаблона – с номером " + Integer.toString(prefixSymbolTo);
                 case SHIFT_AFTER_RESULT:
-                    return "";
+                    return "Следующий символ, который будет сравниваться из шаблона – с номером " + Integer.toString(prefixSymbolTo);
                 default:
                     return "";
             }
         }
-        public String getColor(){
+        public Color getColor(){
             switch (typeOfMessage) {
                 case EQUAL_CHARS:
-                    return "GREEN";
+                    return Color.GREEN;
                 case NOT_EQUAL_CHARS:
-                    return "RED";
+                    return Color.RED;
                 default:
-                    return "BLACK";
+                    return Color.BLACK;
             }
         }
     }
