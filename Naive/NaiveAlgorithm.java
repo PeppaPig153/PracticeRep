@@ -36,6 +36,6 @@ public class NaiveAlgorithm {
 
     //Метод для сравнения соответствующих символов из строки и шаблона
     private boolean isEqualChar(int IndexInText, int IndexInPattern){
-        return Pattern.charAt(IndexInPattern)==T.charAt(IndexInTextT);
+        return Pattern.charAt(IndexInPattern)==T.charAt(IndexInText);
     }
 }

@@ -3,6 +3,7 @@ package Visualizators;
 import CoolStrings.LabeledString;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 
 /**
@@ -25,16 +26,44 @@ public class NaiveVisualization extends Visualizable {
     private String NaiveAlgorithm(String text, String pattern) {
         int[] textColors = new int[text.length()]; // Хранит цвета символов текста
         int[] patternColors = new int[pattern.length()]; // Шаблона
-        int patternPosition; // Под каким символом начинается шаблон(это можно удалить, если не нужно)
-        String answer = new String(); // Строка, хранящая результат работы алгоритма
+        steps = new ArrayList<Step>();
+        StringBuilder answer = new StringBuilder(); // Строка, хранящая результат работы алгоритма
 
-        /*
-            TODO: Реализовать эту функцию, выполняющую алгоритм и сохраняющую шаги в массив Step'ов
-            Пример добавления очередного шага: steps.add(new Step(textColors, patternColors, patternPosition));
-        */
+        for (int i = 0; i <= text.length() - pattern.length(); ++i) { // Перебор всех возможных вариантов вхождения шаблона в строку
+            for(int k=0; k<text.length(); ++k){ // Красим все символы текста в чёрный
+                textColors[k]=Color.BLACK.getRGB();
+            }
+            for(int k=0; k<pattern.length(); ++k){ // Красим все символы шаблона в чёрный
+                patternColors[k]=Color.BLACK.getRGB();
+            }
+            steps.add(new Step(textColors, patternColors, i)); // Добавили изменения
 
+            int j=0;
+            while(j<pattern.length() && pattern.charAt(j)==text.charAt(j)) { // Сравнение символов в соответствующих индексах
+                textColors[j+i]= Color.GREEN.getRGB(); // Покрасили совпавший символ в тексте зелёным
+                patternColors[j] = Color.GREEN.getRGB(); // Покрасили совпавший символ в шаблоне зелёным
+                steps.add(new Step(textColors, patternColors, i)); // Добавили изменения
+                j++;
+            }
 
-        return answer;
+            if(j==pattern.length()){ // Если был найден индекс вхождения
+                if(answer.length()==0)
+                    answer.append(i);
+                else
+                    answer.append(", "+i);
+            }
+            else {
+                textColors[j+i]= Color.RED.getRGB(); // Покрасили не совпавший символ в тексте красным
+                patternColors[j] = Color.RED.getRGB(); // Покрасили не совпавший символ в шаблоне красным
+                steps.add(new Step(textColors, patternColors, i)); // Добавили изменения
+            }
+        }
+
+        if(answer.length()==0){
+            answer.append("-1");
+        }
+
+        return answer.toString();
     }
 
     @Override
