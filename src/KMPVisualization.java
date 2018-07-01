@@ -90,10 +90,9 @@ public class KMPVisualization extends Visualizable {
 
     @Override
     public void visualize(int step) {
-//        labeledPattern.setX(labeledText.getX() + labeledText.getBasicFontSize()*steps.get(step).getPatternPosition());
         labeledText.setX(labeledPattern.getX() - labeledText.getBasicFontSize()*steps.get(step).getPatternPosition());
-        labeledText.setColor(steps.get(step).getColor(), steps.get(step).getTextColoredSymbolIndex());
-        labeledPattern.setColor(steps.get(step).getColor(), steps.get(step).getPatternColoredSymbolIndex());
+        labeledText.setColor(steps.get(step).getColor().getRGB(), steps.get(step).getTextColoredSymbolIndex());
+        labeledPattern.setColor(steps.get(step).getColor().getRGB(), steps.get(step).getPatternColoredSymbolIndex());
     }
 
     class Step {
@@ -115,26 +114,6 @@ public class KMPVisualization extends Visualizable {
             this.prefixSymbolTo = prefixSymbolTo;
             this.typeOfMessage = typeOfMessage;
             this.patternPosition = patternPosition;
-        }
-
-        public int getPatternColoredSymbolIndex() {
-            return patternColoredSymbolIndex;
-        }
-
-        public int getTextColoredSymbolIndex() {
-            return textColoredSymbolIndex;
-        }
-
-        public int getPatternPosition() {
-            return patternPosition;
-        }
-
-        public int getPrefixSymbolFrom() {
-            return prefixSymbolFrom;
-        }
-
-        public int getPrefixSymbolTo() {
-            return prefixSymbolTo;
         }
 
         public String getMessage(){
