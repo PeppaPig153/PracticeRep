@@ -1,3 +1,5 @@
+package CoolStrings;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -52,7 +54,7 @@ public abstract class CoolString {
     public void setColor(int color, int begin, int end) throws IndexOutOfBoundsException{
         if (begin < 0 || begin > labels.length-1 || end < 1 || end > labels.length) {
             throw new IndexOutOfBoundsException("Index " + begin + " " + end +
-                    " out of bounds in setColor of LabeledString: ");
+                    " out of bounds in setColor of CoolStrings.LabeledString: ");
         }
         for (int i = begin; i < end; ++i) {
             labels[i].setForeground(new Color(color));
@@ -68,7 +70,7 @@ public abstract class CoolString {
     public void setColor(int color, int index) throws IndexOutOfBoundsException{
         if (index < 0 || index > labels.length-1) {
             throw new IndexOutOfBoundsException("Index " + index +
-                    " out of bounds in setColor of LabeledString: ");
+                    " out of bounds in setColor of CoolStrings.LabeledString: ");
         }
         labels[index].setForeground(new Color(color));
     }
@@ -81,7 +83,7 @@ public abstract class CoolString {
     public int getColor(int index) {
         if (index < 0 || index > labels.length) {
             throw new IndexOutOfBoundsException("Index " + index +
-                    " out of bounds in getColor of LabeledString: ");
+                    " out of bounds in getColor of CoolStrings.LabeledString: ");
         }
         return labels[index].getForeground().getRGB();
     }

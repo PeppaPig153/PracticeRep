@@ -1,8 +1,10 @@
+package CoolStrings;
+
 import javax.swing.*;
 import java.awt.*;
 
 /**
- * Класс, реализующий интерфейс CoolString для символьных строк
+ * Класс, реализующий интерфейс CoolStrings.CoolString для символьных строк
  */
 public class LabeledString extends CoolString {
     public LabeledString(String string, int elementSize, JPanel panel, int x, int y) {

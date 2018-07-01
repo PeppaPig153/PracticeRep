@@ -1,3 +1,7 @@
+package Visualizators;
+
+import CoolStrings.LabeledString;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -13,7 +17,7 @@ public class KMPVisualization extends Visualizable {
     // Строки из JLabel для отображения шагов:
     private LabeledString labeledText;
     private LabeledString labeledPattern;
-//    private NumeratedString numeratedString;
+//    private CoolStrings.NumeratedString numeratedString;
     private JLabel info;
 
     enum MessageTypes {
@@ -103,11 +107,14 @@ public class KMPVisualization extends Visualizable {
     public void clear() {
         labeledPattern.removeFromPanel(getPanel());
         labeledText.removeFromPanel(getPanel());
+        info.getParent().remove(info);
     }
 
     @Override
     public void visualize(int step) {
-        labeledText.setX(labeledPattern.getX() - labeledText.getBasicFontSize()*steps.get(step).getPatternPosition());
+        if (step < 0)
+            return;
+        labeledText.setX(labeledPattern.getX() - labeledText.getElementSize()*steps.get(step).getPatternPosition());
         // Красим строки полностью в черный:
         labeledPattern.setColor(Color.BLACK.getRGB(), 0, labeledPattern.getElementsNumber());
         labeledText.setColor(Color.BLACK.getRGB(), 0, labeledText.getElementsNumber());

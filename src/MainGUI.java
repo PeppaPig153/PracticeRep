@@ -1,3 +1,6 @@
+import Visualizators.KMPVisualization;
+import Visualizators.NaiveVisualization;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,14 +21,6 @@ public class MainGUI {
         GUIInit();
         // Добавляем обработчики событий к кнопкам и таймеру
         addActionListeners();
-
-//        LabeledString labeledString = new LabeledString("This is a test string", 12, drawingPanel, 20, 20);
-//        labeledString.addToPanel(drawingPanel);
-//        labeledString.setPosition(20,200);
-//        NumeratedString numLabString = new NumeratedString(labeledString.getElementsNumber());
-//        NumeratedString numeratedString = new NumeratedString(new int[] {0, 1, 2, 3, 10, 20}, 12, 20,20);
-//        numeratedString.addToPanel(drawingPanel);
-
     }
 
     // Инициализация графического интерфейса
@@ -61,7 +56,6 @@ public class MainGUI {
                         drawingPanel.getVisualization().clear();
                         drawingPanel.revalidate();
                         drawingPanel.repaint();
-//                        drawingPanel.remove(drawingPanel.getVisualization())
                     }
                     currentStep = -1;
                     if (comboBox.getSelectedItem().equals("Naive")) {
@@ -76,8 +70,7 @@ public class MainGUI {
                         stepsNumber = kmpVisualization.getStepsNumber();
                         System.out.println(stepsNumber);
                     }
-                    startButton.setEnabled(true);
-                    nextButton.setEnabled(true);
+                    update();
                 }
             }
         });
@@ -88,19 +81,15 @@ public class MainGUI {
         });
         // Обработчик на нажатие кнопки Start/Pause:
         startButton.addActionListener(e -> {
-            if (startButton.getText().equals("Start")) {
-                prevButton.setEnabled(false);
-                nextButton.setEnabled(false);
-                visualizeButton.setEnabled(false);
+            // Включаем автоматический переход на следующий шаг:
+            if (!isAutomatic()) {
                 startButton.setText("Pause");
                 timer.start();
             } else {
-                prevButton.setEnabled(true);
-                nextButton.setEnabled(true);
-                visualizeButton.setEnabled(true);
                 startButton.setText("Start");
                 timer.stop();
             }
+            updateButtons();
         });
         // Обработчик на нажатие кнопки Next:
         nextButton.addActionListener(e -> {
@@ -109,12 +98,28 @@ public class MainGUI {
         });
         // Обработчик на сигнал таймера:
         timer = new Timer(TIME_BETWEEN_STEPS, e -> {
-            nextButton.doClick();
+            ++currentStep;
+            update();
         });
     }
 
+    // Функция возвращает true, если переход на следующий шаг выполняется автоматически
+    private boolean isAutomatic() {
+        return startButton.getText().equals("Pause");
+    }
+
+    private boolean isFirstStep() {
+        return currentStep <= 0;
+    }
+
+    private boolean isLastStep() {
+        return currentStep+1 >= stepsNumber;
+    }
+
+
     private void update() {
         updateButtons();
+        currentStepLabel.setText(currentStep+1+"/"+stepsNumber);
         drawingPanel.getVisualization().visualize(currentStep);
     }
 
@@ -122,28 +127,30 @@ public class MainGUI {
     private void updateButtons() {
         checkPrevButton();
         checkStartNextButtons();
+        checkPrevButton();
     }
     // Проверка для кнопки Prev на то, что текущий шаг - первый, если он первый, то нажимать ее нельзя:
-    private void checkPrevButton(){
-        if (currentStep <= 0 && prevButton.isEnabled())
-            prevButton.setEnabled(false);
-        else if (currentStep >0 && startButton.getText().equals("Start")) // Если алгоритм не находится в процессе автоматического показа визуализации
+    private void checkPrevButton() {
+        if (!isFirstStep() && !isAutomatic()) // Если алгоритм не находится в процессе автоматического показа визуализации и не на первом шаге
             prevButton.setEnabled(true);
+        else
+            prevButton.setEnabled(false);
     }
     // Проверка для кнопок Next/Start на то, что текущий шаг - последний:
     // TODO
     private void checkStartNextButtons(){
-        if (currentStep == stepsNumber) {
-            startButton.setText("Start");
-            startButton.setEnabled(false);
+        if (isAutomatic() || isLastStep()) {
             nextButton.setEnabled(false);
-            timer.stop();
+            if (isLastStep()) {
+                startButton.setEnabled(false);
+                startButton.setText("Start");
+                timer.stop();
+            }
         } else {
             startButton.setEnabled(true);
             nextButton.setEnabled(true);
         }
     }
-
 
     private JPanel MajorPanel;
     private JTextField textField;
@@ -154,5 +161,6 @@ public class MainGUI {
     private JButton nextButton;
     private JComboBox comboBox;
     private DrawingPanel drawingPanel;
+    private JLabel currentStepLabel;
     private JLabel answerLabel;
 }

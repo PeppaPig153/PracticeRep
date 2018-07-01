@@ -1,5 +1,8 @@
+package Visualizators;
+
+import CoolStrings.LabeledString;
+
 import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 
 /**
