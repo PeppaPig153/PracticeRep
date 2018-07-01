@@ -19,6 +19,7 @@ public class NaiveVisualization extends Visualizable {
     public NaiveVisualization(String text, String pattern, JPanel panel, JLabel answer) {
         super(text, pattern, panel);
         answer.setText("Answer: " + NaiveAlgorithm(text, pattern));
+        stepsNumber = steps.size();
         labeledText = new LabeledString(text, 20, panel, 20, 20);
         labeledPattern = new LabeledString(pattern, 20, panel, 20, 40);
     }
@@ -73,7 +74,8 @@ public class NaiveVisualization extends Visualizable {
 
     @Override
     public void visualize(int step) {
-        // TODO
+        if (step < 0)
+            return;
         for (int i = 0; i < labeledText.getElementsNumber(); i++) {
             labeledText.setColor(steps.get(step).textColors[i], i);
         }
