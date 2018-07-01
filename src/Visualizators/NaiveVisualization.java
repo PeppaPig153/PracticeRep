@@ -40,7 +40,7 @@ public class NaiveVisualization extends Visualizable {
             steps.add(new Step(textColors, patternColors, i)); // Добавили изменения
 
             int j=0;
-            while(j<pattern.length() && pattern.charAt(j)==text.charAt(j)) { // Сравнение символов в соответствующих индексах
+            while(j<pattern.length() && pattern.charAt(j)==text.charAt(j+i)) { // Сравнение символов в соответствующих индексах
                 textColors[j+i]= Color.GREEN.getRGB(); // Покрасили совпавший символ в тексте зелёным
                 patternColors[j] = Color.GREEN.getRGB(); // Покрасили совпавший символ в шаблоне зелёным
                 steps.add(new Step(textColors, patternColors, i)); // Добавили изменения
@@ -70,6 +70,7 @@ public class NaiveVisualization extends Visualizable {
     @Override
     public void clear() {
         labeledPattern.removeFromPanel(getPanel());
+        labeledText.removeFromPanel(getPanel());
     }
 
     @Override
@@ -82,7 +83,7 @@ public class NaiveVisualization extends Visualizable {
         for (int i = 0; i < labeledPattern.getElementsNumber(); i++) {
             labeledPattern.setColor(steps.get(step).patternColors[i], i);
         }
-        labeledPattern.setX(labeledText.getX()+steps.get(step).patternPosition*labeledText.getElementSize());
+        labeledText.setX(labeledPattern.getX()-steps.get(step).patternPosition*labeledText.getElementSize());
     }
 
 
