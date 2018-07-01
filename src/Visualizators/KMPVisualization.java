@@ -112,8 +112,8 @@ public class KMPVisualization extends Visualizable {
 
     @Override
     public void visualize(int step) {
-        if (step < 0)
-            return;
+    if (step < 0)
+        return;
         labeledText.setX(labeledPattern.getX() - labeledText.getElementSize()*steps.get(step).getPatternPosition());
         // Красим строки полностью в черный:
         labeledPattern.setColor(Color.BLACK.getRGB(), 0, labeledPattern.getElementsNumber());

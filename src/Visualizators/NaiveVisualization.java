@@ -70,6 +70,7 @@ public class NaiveVisualization extends Visualizable {
     @Override
     public void clear() {
         labeledPattern.removeFromPanel(getPanel());
+        labeledText.removeFromPanel(getPanel());
     }
 
     @Override
@@ -80,9 +81,9 @@ public class NaiveVisualization extends Visualizable {
             labeledText.setColor(steps.get(step).textColors[i], i);
         }
         for (int i = 0; i < labeledPattern.getElementsNumber(); i++) {
-            labeledPattern.setColor(steps.get(step).textColors[i], i);
+            labeledPattern.setColor(steps.get(step).patternColors[i], i);
         }
-        labeledPattern.setX(labeledText.getX()+steps.get(step).patternPosition*labeledText.getElementSize());
+        labeledText.setX(labeledPattern.getX()-steps.get(step).patternPosition*labeledText.getElementSize());
     }
 
 
@@ -92,8 +93,8 @@ public class NaiveVisualization extends Visualizable {
         private final int patternPosition; // Позиция шаблона относительно символов текста
 
         public Step(int[] textColors, int[] patternColors, int patternPosition) {
-            this.textColors = textColors;
-            this.patternColors = patternColors;
+            this.textColors = textColors.clone();
+            this.patternColors = patternColors.clone();
             this.patternPosition = patternPosition;
         }
 
