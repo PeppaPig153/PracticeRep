@@ -15,10 +15,10 @@ public class NaiveVisualization extends Visualizable {
     public NaiveVisualization(String text, String pattern, JPanel panel, JLabel answer) {
         super(text, pattern);
         answer.setText("Answer: " + NaiveAlgorithm(text, pattern));
-        labeledText = new LabeledString(text, 20, 20, 20);
-        labeledPattern = new LabeledString(pattern, 20, 20, 40);
-        labeledText.addToPanel(panel);
-        labeledPattern.addToPanel(panel);
+        labeledText = new LabeledString(text, 20, panel, 20, 20);
+        labeledPattern = new LabeledString(pattern, 20, panel, 20, 40);
+//        labeledText.addToPanel(panel);
+//        labeledPattern.addToPanel(panel);
     }
 
     private String NaiveAlgorithm(String text, String pattern) {
