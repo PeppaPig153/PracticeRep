@@ -31,16 +31,16 @@ public class NaiveVisualization extends Visualizable {
         StringBuilder answer = new StringBuilder(); // Строка, хранящая результат работы алгоритма
 
         for (int i = 0; i <= text.length() - pattern.length(); ++i) { // Перебор всех возможных вариантов вхождения шаблона в строку
-            for(int k=0; k<text.length(); ++k){ // Красим все символы текста в чёрный
+            for(int k=0; k<textColors.length; ++k){ // Красим все символы текста в чёрный
                 textColors[k]=Color.BLACK.getRGB();
             }
-            for(int k=0; k<pattern.length(); ++k){ // Красим все символы шаблона в чёрный
+            for(int k=0; k<patternColors.length; ++k){ // Красим все символы шаблона в чёрный
                 patternColors[k]=Color.BLACK.getRGB();
             }
             steps.add(new Step(textColors, patternColors, i)); // Добавили изменения
 
             int j=0;
-            while(j<pattern.length() && pattern.charAt(j)==text.charAt(j)) { // Сравнение символов в соответствующих индексах
+            while(j<pattern.length() && pattern.charAt(j)==text.charAt(j+i)) { // Сравнение символов в соответствующих индексах
                 textColors[j+i]= Color.GREEN.getRGB(); // Покрасили совпавший символ в тексте зелёным
                 patternColors[j] = Color.GREEN.getRGB(); // Покрасили совпавший символ в шаблоне зелёным
                 steps.add(new Step(textColors, patternColors, i)); // Добавили изменения
