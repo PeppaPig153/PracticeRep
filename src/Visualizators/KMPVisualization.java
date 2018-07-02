@@ -201,8 +201,8 @@ public class KMPVisualization extends Visualizable {
             this.textColors = textColors.clone();
             this.patternColors = patternColors.clone();
             this.patternPosition = patternPosition;
-            this.prefixColors=prefixColors;
-            this.prefixNumerationColors=prefixNumerationColors;
+            this.prefixColors=prefixColors.clone();
+            this.prefixNumerationColors=prefixNumerationColors.clone();
         }
 
         public int[] getTextColors() {
