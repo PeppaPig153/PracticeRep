@@ -2,6 +2,7 @@ package Visualizators;
 
 import CoolStrings.LabeledString;
 import CoolStrings.NumeratedString;
+import com.sun.org.apache.xpath.internal.SourceTree;
 
 import javax.swing.*;
 import java.awt.*;
@@ -39,23 +40,6 @@ public class NaiveVisualization extends Visualizable {
         infoPattern = new JLabel("Pattern:", SwingConstants.RIGHT);
         panel.add(infoPattern);
         infoPattern.setBounds(20,60,60,20);
-    }
-
-    private ArrayList<Integer> PrefixFunction(String line){
-        ArrayList<Integer> result = new ArrayList<Integer>();
-        result.add(new Integer(0)); // Для первого символа значение префикс функции равно 0
-
-        for(int i = 1 ; i < line.length() ; ++i){
-            Integer k = result.get(i-1);
-            while(k > 0 && line.charAt(i) != line.charAt(k)){
-                k = result.get(k - 1);
-            }
-            if(line.charAt(i) == line.charAt(k))
-                ++k;
-            result.add(k);
-        }
-
-        return result;
     }
 
     private String NaiveAlgorithm(String text, String pattern) {
