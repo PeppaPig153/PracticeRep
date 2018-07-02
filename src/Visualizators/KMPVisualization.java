@@ -20,7 +20,12 @@ public class KMPVisualization extends Visualizable {
     private LabeledString labeledPattern;
     private NumeratedString labeledPrefix;
     private NumeratedString numeration;
-    private JLabel info;
+    private JLabel infoMessage;
+    private JLabel infoText;
+    private JLabel infoPattern;
+    private JLabel infoNumeration;
+    private JLabel infoPrefix;
+
 
     enum MessageTypes {
         RES_FOUND,
@@ -34,16 +39,29 @@ public class KMPVisualization extends Visualizable {
         super(text, pattern, panel);
         answer.setText("Answer: " + KMPAlgorithm(text, pattern));
         // Нумерация символов строки:
-        numeration = new NumeratedString(text.length(), 20, panel, 20, 20);
+        numeration = new NumeratedString(text.length(), 20, panel, 80, 20);
+        infoNumeration = new JLabel("i:", SwingConstants.RIGHT);
+        panel.add(infoNumeration);
+        infoNumeration.setBounds(20,20,60,20);
         // Строка и шаблон:
-        labeledText = new LabeledString(text, 20, panel, 20, 40);
-        labeledPattern = new LabeledString(pattern, 20, panel, 20, 80);
+        labeledText = new LabeledString(text, 20, panel, 80, 40);
+        infoText = new JLabel("Text:", SwingConstants.RIGHT);
+        panel.add(infoText);
+        infoText.setBounds(20,40,60,20);
+        labeledPattern = new LabeledString(pattern, 20, panel, 80, 80);
+        infoPattern = new JLabel("Pattern:", SwingConstants.RIGHT);
+        panel.add(infoPattern);
+        infoPattern.setBounds(20,80,60,20);
         // Значения префикс-функции:
-        labeledPrefix = new NumeratedString(prefix, 20, panel, 20, 60);
-        info = new JLabel("");
-        panel.add(info);
-        info.setBounds(20, 100, 500, 40);
-        info.setAutoscrolls(true);
+        labeledPrefix = new NumeratedString(prefix, 20, panel, 80, 60);
+        infoPrefix = new JLabel("Prefix:", SwingConstants.RIGHT);
+        panel.add(infoPrefix);
+        infoPrefix.setBounds(20,60,60,20);
+
+        infoMessage = new JLabel("");
+        panel.add(infoMessage);
+        infoMessage.setBounds(20, 100, 500, 40);
+        infoMessage.setAutoscrolls(true);
         stepsNumber = steps.size();
     }
 
@@ -108,7 +126,13 @@ public class KMPVisualization extends Visualizable {
     public void clear() {
         labeledPattern.removeFromPanel(getPanel());
         labeledText.removeFromPanel(getPanel());
-        info.getParent().remove(info);
+        numeration.removeFromPanel(getPanel());
+        labeledPrefix.removeFromPanel(getPanel());
+        infoMessage.getParent().remove(infoMessage);
+        infoPrefix.getParent().remove(infoPrefix);
+        infoPattern.getParent().remove(infoPattern);
+        infoNumeration.getParent().remove(infoNumeration);
+        infoText.getParent().remove(infoText);
     }
 
     @Override
@@ -124,8 +148,8 @@ public class KMPVisualization extends Visualizable {
         labeledText.setColor(steps.get(step).getColor().getRGB(), steps.get(step).getTextColoredSymbolIndex());
         labeledPattern.setColor(steps.get(step).getColor().getRGB(), steps.get(step).getPatternColoredSymbolIndex());
         // Устанавливаем сообщение для шага:
-        info.setText(steps.get(step).getMessage());
-        System.out.println(info.getText());
+        infoMessage.setText(steps.get(step).getMessage());
+        System.out.println(infoMessage.getText());
     }
 
     class Step {

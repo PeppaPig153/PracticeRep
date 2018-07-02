@@ -13,6 +13,7 @@ public class MainGUI {
     private static final int FRAME_WIDTH  = 640;
     private static final int FRAME_HEIGHT = 480;
     private static final int TIME_BETWEEN_STEPS = 500;
+    private static final int TEXT_MAX_SIZE = 24;
     private int currentStep = -1;
     private int stepsNumber;
     private Timer timer;
@@ -58,10 +59,10 @@ public class MainGUI {
                     }
                     currentStep = -1;
                     // Обрезаем строки, если они длиннее 28 символов
-                    String text = textField.getText().length()>28 ?
-                            textField.getText().substring(0,28) : textField.getText();
-                    String pattern = patternField.getText().length()>28 ?
-                            patternField.getText().substring(0,28) : patternField.getText();
+                    String text = textField.getText().length()>TEXT_MAX_SIZE ?
+                            textField.getText().substring(0,TEXT_MAX_SIZE) : textField.getText();
+                    String pattern = patternField.getText().length()>TEXT_MAX_SIZE ?
+                            patternField.getText().substring(0,TEXT_MAX_SIZE) : patternField.getText();
                     if (comboBox.getSelectedItem().equals("Naive")) {
                         NaiveVisualization naiveVisualization = new NaiveVisualization(text,
                                 pattern, drawingPanel, answerLabel);

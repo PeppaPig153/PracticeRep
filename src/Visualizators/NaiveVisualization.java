@@ -16,6 +16,9 @@ public class NaiveVisualization extends Visualizable {
     // Строки из JLabel для отображения шагов:
     private LabeledString labeledText;
     private LabeledString labeledPattern;
+    private JLabel infoText;
+    private JLabel infoPattern;
+    private JLabel infoNumeration;
     private NumeratedString numeration;
 
     public NaiveVisualization(String text, String pattern, JPanel panel, JLabel answer) {
@@ -23,9 +26,18 @@ public class NaiveVisualization extends Visualizable {
         answer.setText("Answer: " + NaiveAlgorithm(text, pattern));
         stepsNumber = steps.size();
         // Нумерация символов строки:
-        numeration = new NumeratedString(text.length(), 20, panel, 20, 20);
-        labeledText = new LabeledString(text, 20, panel, 20, 40);
-        labeledPattern = new LabeledString(pattern, 20, panel, 20, 60);
+        numeration = new NumeratedString(text.length(), 20, panel, 80, 20);
+        infoNumeration = new JLabel("i:", SwingConstants.RIGHT);
+        panel.add(infoNumeration);
+        infoNumeration.setBounds(20,20,60,20);
+        labeledText = new LabeledString(text, 20, panel, 80, 40);
+        infoText = new JLabel("Text:", SwingConstants.RIGHT);
+        panel.add(infoText);
+        infoText.setBounds(20,40,60,20);
+        labeledPattern = new LabeledString(pattern, 20, panel, 80, 60);
+        infoPattern = new JLabel("Pattern:", SwingConstants.RIGHT);
+        panel.add(infoPattern);
+        infoPattern.setBounds(20,80,60,20);
     }
 
     private String NaiveAlgorithm(String text, String pattern) {
@@ -75,6 +87,10 @@ public class NaiveVisualization extends Visualizable {
     public void clear() {
         labeledPattern.removeFromPanel(getPanel());
         labeledText.removeFromPanel(getPanel());
+        numeration.removeFromPanel(getPanel());
+        infoPattern.getParent().remove(infoPattern);
+        infoNumeration.getParent().remove(infoNumeration);
+        infoText.getParent().remove(infoText);
     }
 
     @Override
