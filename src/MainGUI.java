@@ -48,8 +48,8 @@ public class MainGUI {
         visualizeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (textField.getText().length() == 0 && textField.getText().length() == 0) {
-                    // TODO: Выводим сообщение об ошибке?
+                if (textField.getText().length() == 0 || patternField.getText().length() == 0) {
+                    JOptionPane.showMessageDialog(null, "One of fields is empty", "Error", JOptionPane.ERROR_MESSAGE);
                 } else {
                     if (drawingPanel.getVisualization() != null) {
                         // Очищаем окно от прошлой визуализации
