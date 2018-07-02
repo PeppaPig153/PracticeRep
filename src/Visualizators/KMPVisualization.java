@@ -1,6 +1,7 @@
 package Visualizators;
 
 import CoolStrings.LabeledString;
+import CoolStrings.NumeratedString;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,7 +18,8 @@ public class KMPVisualization extends Visualizable {
     // Строки из JLabel для отображения шагов:
     private LabeledString labeledText;
     private LabeledString labeledPattern;
-//    private CoolStrings.NumeratedString numeratedString;
+    private NumeratedString labeledPrefix;
+    private NumeratedString numeration;
     private JLabel info;
 
     enum MessageTypes {
@@ -28,11 +30,16 @@ public class KMPVisualization extends Visualizable {
         SHIFT_AFTER_COMPARE
     };
 
-    public KMPVisualization(String text, String pattern, JPanel panel, JLabel answer/*, JLabel info?? */) {
+    public KMPVisualization(String text, String pattern, JPanel panel, JLabel answer) {
         super(text, pattern, panel);
         answer.setText("Answer: " + KMPAlgorithm(text, pattern));
-        labeledText = new LabeledString(text, 20, panel, 20, 20);
-        labeledPattern = new LabeledString(pattern, 20, panel, 20, 40);
+        // Нумерация символов строки:
+        numeration = new NumeratedString(text.length(), 20, panel, 20, 20);
+        // Строка и шаблон:
+        labeledText = new LabeledString(text, 20, panel, 20, 40);
+        labeledPattern = new LabeledString(pattern, 20, panel, 20, 80);
+        // Значения префикс-функции:
+        labeledPrefix = new NumeratedString(prefix, 20, panel, 20, 60);
         info = new JLabel("");
         panel.add(info);
         info.setBounds(20, 100, 500, 40);
@@ -45,7 +52,7 @@ public class KMPVisualization extends Visualizable {
 
         //нахождение префикс функции
         prefix = new ArrayList<Integer>();
-        prefix.add(new Integer(0));
+        prefix.add(0);
         for(int i = 1 ; i < text.length() ; ++i){
             Integer k = prefix.get(i-1);
             while(k > 0 && text.charAt(i) != text.charAt(k)){
