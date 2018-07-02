@@ -2,6 +2,7 @@ package Visualizators;
 
 import CoolStrings.LabeledString;
 import CoolStrings.NumeratedString;
+import GUIs.DrawingPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -27,7 +28,7 @@ public class KMPVisualization extends Visualizable {
     private JLabel infoNumeration;
     private JLabel infoPrefix;
 
-    public KMPVisualization(String text, String pattern, JPanel panel, JLabel answer) {
+    public KMPVisualization(String text, String pattern, DrawingPanel panel, JLabel answer) {
         super(text, pattern, panel);
         answer.setText("Answer: " + KMPAlgorithm(text, pattern));
         stepsNumber = steps.size();
@@ -62,7 +63,7 @@ public class KMPVisualization extends Visualizable {
 
     private ArrayList<Integer> PrefixFunction(String line){
         ArrayList<Integer> result = new ArrayList<Integer>();
-        result.add(new Integer(0)); // Для первого символа значение префикс функции равно 0
+        result.add(0); // Для первого символа значение префикс функции равно 0
 
         for(int i = 1 ; i < line.length() ; ++i){
             Integer k = result.get(i-1);
