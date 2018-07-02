@@ -2,7 +2,6 @@ package Visualizators;
 
 import CoolStrings.LabeledString;
 import CoolStrings.NumeratedString;
-import com.sun.org.apache.xpath.internal.SourceTree;
 
 import javax.swing.*;
 import java.awt.*;
