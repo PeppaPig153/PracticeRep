@@ -20,24 +20,15 @@ public class KMPVisualization extends Visualizable {
     private LabeledString labeledPattern;
     private NumeratedString labeledPrefix;
     private NumeratedString numeration;
-    private JLabel infoMessage;
     private JLabel infoText;
     private JLabel infoPattern;
     private JLabel infoNumeration;
     private JLabel infoPrefix;
 
-
-    enum MessageTypes {
-        RES_FOUND,
-        SHIFT_AFTER_RESULT,
-        EQUAL_CHARS,
-        NOT_EQUAL_CHARS,
-        SHIFT_AFTER_COMPARE
-    };
-
     public KMPVisualization(String text, String pattern, JPanel panel, JLabel answer) {
         super(text, pattern, panel);
         answer.setText("Answer: " + KMPAlgorithm(text, pattern));
+        stepsNumber = steps.size();
         // Нумерация символов строки:
         numeration = new NumeratedString(text.length(), 20, panel, 80, 20);
         infoNumeration = new JLabel("i:", SwingConstants.RIGHT);
@@ -57,69 +48,84 @@ public class KMPVisualization extends Visualizable {
         infoPrefix = new JLabel("Prefix:", SwingConstants.RIGHT);
         panel.add(infoPrefix);
         infoPrefix.setBounds(20,60,60,20);
+    }
 
-        infoMessage = new JLabel("");
-        panel.add(infoMessage);
-        infoMessage.setBounds(20, 100, 500, 40);
-        infoMessage.setAutoscrolls(true);
-        stepsNumber = steps.size();
+    private ArrayList<Integer> PrefixFunction(String line){
+        ArrayList<Integer> result = new ArrayList<Integer>();
+        result.add(new Integer(0)); // Для первого символа значение префикс функции равно 0
+
+        for(int i = 1 ; i < line.length() ; ++i){
+            Integer k = result.get(i-1);
+            while(k > 0 && line.charAt(i) != line.charAt(k)){
+                k = result.get(k - 1);
+            }
+            if(line.charAt(i) == line.charAt(k))
+                ++k;
+            result.add(k);
+        }
+
+        return result;
     }
 
     private String KMPAlgorithm(String text, String pattern) {
+        StringBuilder answer = new StringBuilder();
+        steps = new ArrayList<Step>();
+        int[] textColors = new int[text.length()]; // Хранит цвета символов текста
+        int[] patternColors = new int[pattern.length()]; // Шаблона
+        int indexInText =0; //индекс приложения шаблона к тексту
+        int indexInPattern=0; //текущий обрабатываемый символ в тексте
 
+        prefix = PrefixFunction(pattern); // Нахождение префикс функции
 
-        //нахождение префикс функции
-        prefix = new ArrayList<Integer>();
-        prefix.add(0);
-        for(int i = 1 ; i < text.length() ; ++i){
-            Integer k = prefix.get(i-1);
-            while(k > 0 && text.charAt(i) != text.charAt(k)){
-                k = prefix.get(k - 1);
-            }
-            if(text.charAt(i) == text.charAt(k)) ++k;
-            prefix.add(k);
+        for(int k=0; k<textColors.length; ++k){ // Красим все символы текста в чёрный
+            textColors[k]=Color.BLACK.getRGB();
+        }
+        for(int k=0; k<patternColors.length; ++k){ // Красим все символы шаблона в чёрный
+            patternColors[k]=Color.BLACK.getRGB();
         }
 
-        //алгоритм КМП
-        ArrayList<Integer> result = new ArrayList<Integer>();
-        steps = new ArrayList<Step>();
-        int k = 0;
-        for (int i = 0; i < text.length(); ++i) {
-            while (pattern.charAt(k) != text.charAt(i) && k > 0) {
-                steps.add(new Step(i,k,0,0,MessageTypes.NOT_EQUAL_CHARS,i-k));
-                steps.add(new Step(i,k,k-1,prefix.get(k - 1),MessageTypes.SHIFT_AFTER_COMPARE,i-prefix.get(k - 1)));
-                k = prefix.get(k - 1);
-            }
-            steps.add(new Step(i,k,0,0,MessageTypes.EQUAL_CHARS,i-k));
-            if (pattern.charAt(k) == text.charAt(i)) {
-                k = k + 1;
-                if (k == pattern.length()) {
-                    steps.add(new Step(i,k-1,0,0,MessageTypes.RES_FOUND,i-k+1));
-                    steps.add(new Step(i,k-1,k-1,prefix.get(k - 1),MessageTypes.SHIFT_AFTER_RESULT,i-prefix.get(k-1)));
-                    result.add(i + 1 - k);
-                    k = prefix.get(k - 1);
-
+        while(indexInText<=text.length()-pattern.length()){ // Пока можно прикладывать
+            if(indexInText!=0) {
+                for (int k = 0; k < textColors.length; ++k) { // Красим все символы текста в чёрный
+                    if (k < indexInText || k >= indexInPattern + indexInText || indexInPattern == 0)
+                        textColors[k] = Color.BLACK.getRGB();
                 }
+                for (int k = indexInPattern; k < patternColors.length; ++k) { // Красим символы т текущего индекса и до конца в чёрный шаблона в чёрный
+                    patternColors[k] = Color.BLACK.getRGB();
+                }
+                steps.add(new Step(textColors, patternColors, indexInText)); // Добавили изменения
+            }
+
+            while(indexInPattern<pattern.length() && pattern.charAt(indexInPattern)==text.charAt(indexInPattern+indexInText)) { // Сравнение символов в соответствующих индексах
+                textColors[indexInPattern+indexInText]= Color.GREEN.getRGB(); // Покрасили совпавший символ в тексте зелёным
+                patternColors[indexInPattern] = Color.GREEN.getRGB(); // Покрасили совпавший символ в шаблоне зелёным
+                steps.add(new Step(textColors, patternColors, indexInText)); // Добавили изменения
+                indexInPattern++;
+            }
+
+            if(indexInPattern==pattern.length()){ // Если был найден индекс вхождения
+                indexInPattern=0;
+                indexInText++;
+                if(answer.length()==0)
+                    answer.append(indexInText);
+                else
+                    answer.append(", "+indexInText);
             }
             else {
-                k = 0;
+                textColors[indexInPattern+indexInText]= Color.RED.getRGB(); // Покрасили не совпавший символ в тексте красным
+                patternColors[indexInPattern] = Color.RED.getRGB(); // Покрасили не совпавший символ в шаблоне красным
+                steps.add(new Step(textColors, patternColors, indexInText)); // Добавили изменения
+
+                if(indexInPattern==0)
+                    indexInText++;
+                else {
+                    indexInText+=indexInPattern - prefix.get(indexInPattern - 1);
+                    indexInPattern = prefix.get(indexInPattern - 1);
+                }
             }
         }
 
-
-
-
-
-        //Результат работы алгоритма
-        StringBuilder builder = new StringBuilder();
-        for (int item : result) {
-            builder.append(item);
-            builder.append(", ");
-        }
-        if (!result.isEmpty())
-            builder.delete(builder.length()-2, builder.length());
-        return builder.toString();
-        
+        return answer.toString();
     }
 
     @Override
@@ -128,7 +134,6 @@ public class KMPVisualization extends Visualizable {
         labeledText.removeFromPanel(getPanel());
         numeration.removeFromPanel(getPanel());
         labeledPrefix.removeFromPanel(getPanel());
-        infoMessage.getParent().remove(infoMessage);
         infoPrefix.getParent().remove(infoPrefix);
         infoPattern.getParent().remove(infoPattern);
         infoNumeration.getParent().remove(infoNumeration);
@@ -137,89 +142,40 @@ public class KMPVisualization extends Visualizable {
 
     @Override
     public void visualize(int step) {
-    if (step < 0)
-        return;
-//        labeledText.setX(labeledPattern.getX() - labeledText.getElementSize()*steps.get(step).getPatternPosition());
+        if (step < 0)
+            return;
+        for (int i = 0; i < labeledText.getElementsNumber(); i++) {
+            labeledText.setColor(steps.get(step).textColors[i], i);
+        }
+        for (int i = 0; i < labeledPattern.getElementsNumber(); i++) {
+            labeledPattern.setColor(steps.get(step).patternColors[i], i);
+        }
+//        labeledText.setX(labeledPattern.getX()-steps.get(step).patternPosition*labeledText.getElementSize());
         labeledPattern.setX(labeledText.getX() + labeledText.getElementSize()*steps.get(step).getPatternPosition());
-        // Красим строки полностью в черный:
-        labeledPattern.setColor(Color.BLACK.getRGB(), 0, labeledPattern.getElementsNumber());
-        labeledText.setColor(Color.BLACK.getRGB(), 0, labeledText.getElementsNumber());
-        // Красим необходимые символы в нужный цвет:
-        labeledText.setColor(steps.get(step).getColor().getRGB(), steps.get(step).getTextColoredSymbolIndex());
-        labeledPattern.setColor(steps.get(step).getColor().getRGB(), steps.get(step).getPatternColoredSymbolIndex());
-        // Устанавливаем сообщение для шага:
-        infoMessage.setText(steps.get(step).getMessage());
-        System.out.println(infoMessage.getText());
     }
 
     class Step {
-        private int textColoredSymbolIndex;
-        private int patternColoredSymbolIndex;
-        private int color;
-        private int prefixSymbolFrom;
-        private int prefixSymbolTo;
-        private MessageTypes typeOfMessage;
-        private int patternPosition;
+        private final int[] textColors; // Цвета символов текста
+        private final int[] patternColors; // Цвета символов шаблона
+        private final int patternPosition; // Позиция шаблона относительно символов текста
 
-
-
-        public Step(int textColoredSymbolIndex, int patternColoredSymbolIndex, int prefixSymbolFrom,
-                    int prefixSymbolTo, MessageTypes typeOfMessage, int patternPosition) {
-            this.textColoredSymbolIndex = textColoredSymbolIndex;
-            this.patternColoredSymbolIndex = patternColoredSymbolIndex;
-            this.prefixSymbolFrom = prefixSymbolFrom;
-            this.prefixSymbolTo = prefixSymbolTo;
-            this.typeOfMessage = typeOfMessage;
+        public Step(int[] textColors, int[] patternColors, int patternPosition) {
+            this.textColors = textColors.clone();
+            this.patternColors = patternColors.clone();
             this.patternPosition = patternPosition;
         }
 
-        public String getMessage(){
-            switch (typeOfMessage){
-                case RES_FOUND:
-                    return "Все символы совпадают, индекс найденной подстроки " + Integer.toString(textColoredSymbolIndex - patternColoredSymbolIndex);
-                case EQUAL_CHARS:
-                    return "Символы совпадают, переходим к следующим";
-                case NOT_EQUAL_CHARS:
-                    return "Символы не совпадают, двигаем строку ";
-                case SHIFT_AFTER_COMPARE:
-                    return "Следующий символ, который будет сравниваться из шаблона – с номером " + Integer.toString(prefixSymbolTo);
-                case SHIFT_AFTER_RESULT:
-                    return "Следующий символ, который будет сравниваться из шаблона – с номером " + Integer.toString(prefixSymbolTo);
-                default:
-                    return "";
-            }
+        public int[] getTextColors() {
+            return textColors;
         }
 
-        public Color getColor(){
-            switch (typeOfMessage) {
-                case EQUAL_CHARS:
-                    return Color.GREEN;
-                case NOT_EQUAL_CHARS:
-                    return Color.RED;
-                default:
-                    return Color.BLACK;
-
-            }
-        }
-
-        public int getTextColoredSymbolIndex() {
-            return textColoredSymbolIndex;
-        }
-
-        public int getPatternColoredSymbolIndex() {
-            return patternColoredSymbolIndex;
-        }
-
-        public int getPrefixSymbolFrom() {
-            return prefixSymbolFrom;
-        }
-
-        public int getPrefixSymbolTo() {
-            return prefixSymbolTo;
+        public int[] getPatternColors() {
+            return patternColors;
         }
 
         public int getPatternPosition() {
             return patternPosition;
         }
     }
+
 }
