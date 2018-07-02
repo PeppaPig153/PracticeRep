@@ -59,6 +59,9 @@ public class MainGUI {
                     }
                     currentStep = -1;
                     // Обрезаем строки, если они длиннее TEXT_MAX_SIZE символов
+                    if (textField.getText().length() > TEXT_MAX_SIZE || patternField.getText().length() > TEXT_MAX_SIZE) {
+                        JOptionPane.showMessageDialog(null, "Data will be cut off to 24 symbols", "Warning", JOptionPane.WARNING_MESSAGE);
+                    }
                     String text = textField.getText().length()>TEXT_MAX_SIZE ?
                             textField.getText().substring(0,TEXT_MAX_SIZE) : textField.getText();
                     String pattern = patternField.getText().length()>TEXT_MAX_SIZE ?
