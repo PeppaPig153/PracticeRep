@@ -123,14 +123,15 @@ public class KMPVisualization extends Visualizable {
             }
 
             if(indexInPattern==pattern.length()){ // Если был найден индекс вхождения
-                prefixColors[indexInPattern-1]=Color.BLUE.getRGB();
-                indexInPattern=prefix.get(indexInPattern-1);
-                indexInText+=pattern.length()-indexInPattern;
-                prefixNumerationColors[indexInPattern]=Color.BLUE.getRGB();
                 if(answer.length()==0)
                     answer.append(indexInText);
                 else
                     answer.append(", "+indexInText);
+
+                prefixColors[indexInPattern-1]=Color.BLUE.getRGB();
+                indexInPattern=prefix.get(indexInPattern-1);
+                indexInText+=pattern.length()-indexInPattern;
+                prefixNumerationColors[indexInPattern]=Color.BLUE.getRGB();
             }
             else {
                 textColors[indexInPattern+indexInText]= Color.RED.getRGB(); // Покрасили не совпавший символ в тексте красным
@@ -146,6 +147,10 @@ public class KMPVisualization extends Visualizable {
                     prefixNumerationColors[indexInPattern]=Color.BLUE.getRGB();
                 }
             }
+        }
+
+        if(answer.length()==0){
+            answer.append("-1");
         }
 
         return answer.toString();
