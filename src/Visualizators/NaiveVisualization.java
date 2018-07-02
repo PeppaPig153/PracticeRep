@@ -1,6 +1,7 @@
 package Visualizators;
 
 import CoolStrings.LabeledString;
+import CoolStrings.NumeratedString;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,13 +16,16 @@ public class NaiveVisualization extends Visualizable {
     // Строки из JLabel для отображения шагов:
     private LabeledString labeledText;
     private LabeledString labeledPattern;
+    private NumeratedString numeration;
 
     public NaiveVisualization(String text, String pattern, JPanel panel, JLabel answer) {
         super(text, pattern, panel);
         answer.setText("Answer: " + NaiveAlgorithm(text, pattern));
         stepsNumber = steps.size();
-        labeledText = new LabeledString(text, 20, panel, 20, 20);
-        labeledPattern = new LabeledString(pattern, 20, panel, 20, 40);
+        // Нумерация символов строки:
+        numeration = new NumeratedString(text.length(), 20, panel, 20, 20);
+        labeledText = new LabeledString(text, 20, panel, 20, 40);
+        labeledPattern = new LabeledString(pattern, 20, panel, 20, 60);
     }
 
     private String NaiveAlgorithm(String text, String pattern) {
