@@ -1,5 +1,7 @@
 package CoolStrings;
 
+import GUIs.DrawingPanel;
+
 import javax.swing.*;
 import java.util.ArrayList;
 
@@ -15,7 +17,7 @@ public class NumeratedString extends CoolString {
      * @param x Координата x строки
      * @param y Координата y строки
      */
-    public NumeratedString(ArrayList<Integer> elements, int elementSize, JPanel panel, int x, int y) {
+    public NumeratedString(ArrayList<Integer> elements, int elementSize, DrawingPanel panel, int x, int y) {
         super(elements.size(), elementSize, panel, x, y);
         for(int i = 0; i < elements.size(); ++i) {
             setText(i, String.valueOf(elements.get(i)));
@@ -33,7 +35,7 @@ public class NumeratedString extends CoolString {
      * @param x Координата x строки
      * @param y Координата y строки
      */
-    public NumeratedString(int length, int elementSize, JPanel panel, int x, int y) {
+    public NumeratedString(int length, int elementSize, DrawingPanel panel, int x, int y) {
         super(length, elementSize, panel, x, y);
         for (int i = 0; i < length; ++i) {
             setText(i, String.valueOf(i));
@@ -41,7 +43,7 @@ public class NumeratedString extends CoolString {
         }
     }
 
-    public NumeratedString(ArrayList<Integer> elements, int elementSize, JPanel panel) {
+    public NumeratedString(ArrayList<Integer> elements, int elementSize, DrawingPanel panel) {
         this(elements, elementSize, panel, 0, 0);
     }
 }

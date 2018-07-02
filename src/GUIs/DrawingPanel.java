@@ -1,8 +1,10 @@
+package GUIs;
+
 import Visualizators.Visualizable;
 
 import javax.swing.*;
 
-public class DrawingPanel extends JPanel {
+public class DrawingPanel extends JLayeredPane {
     Visualizable visualizable;
 
     public void setVisualization(Visualizable visualizable) {
