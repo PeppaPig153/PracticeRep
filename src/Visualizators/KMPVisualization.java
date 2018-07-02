@@ -30,9 +30,12 @@ public class KMPVisualization extends Visualizable {
     private DrawingPanel panel;
     private String text;
     private String pattern;
+    private DrawingLayer drawingLayer;
 
     public KMPVisualization(String text, String pattern, DrawingPanel panel, JLabel answer) {
         super(text, pattern, panel);
+        drawingLayer = new DrawingLayer();
+        panel.setDrawingLayer(drawingLayer);
         this.panel = panel;
         this.text = text;
         this.pattern = pattern;
@@ -65,6 +68,8 @@ public class KMPVisualization extends Visualizable {
         infoPrefix = new JLabel("Prefix:", SwingConstants.RIGHT);
         panel.add(infoPrefix);
         infoPrefix.setBounds(20,120,60,20);
+
+        panel.setVisible(true);
     }
 
     private ArrayList<Integer> PrefixFunction(String line){
@@ -220,19 +225,8 @@ public class KMPVisualization extends Visualizable {
         labeledPattern.setX(labeledText.getX() + labeledText.getElementSize()*step.getPatternPosition());
         int prefixLength = step.getPrefixLength();
         int prefixIndex = step.getPrefixIndex();
-
-        if(prefixLength != 0){
-
-
-            Graphics g = panel.getGraphics();
-            g.clear();
-            panel.paintComponents(g);
-            g.setColor(Color.RED);
-            g.drawRoundRect(80, 115, 40 + 20*prefixLength, 25, 20, 15);
-
-
-        }
-
+        drawingLayer.setPrefixLength(prefixLength); // Устанавливаем параметр
+        drawingLayer.repaint(); // Перерисовываем
     }
 
     class Step {
@@ -283,4 +277,22 @@ public class KMPVisualization extends Visualizable {
         }
     }
 
+
+    class DrawingLayer extends JPanel {
+
+        @Override
+        public void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            if(prefixLength != 0){
+                g.setColor(Color.RED);
+                g.drawRoundRect(80, 115, 40 + 20*prefixLength, 25, 20, 15);
+                panel.getDrawingLayer().repaint();
+            }
+        }
+        private int prefixLength;
+
+        public void setPrefixLength(int prefixLength) {
+            this.prefixLength = prefixLength;
+        }
+    }
 }

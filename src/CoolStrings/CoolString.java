@@ -155,6 +155,11 @@ public abstract class CoolString {
         return labels.length;
     }
 
+    /**
+     * Устанавливает у элемента строки под номером index текст text
+     * @param index Ноемр элемента, у которого меняется значение
+     * @param text Новое значение элемента
+     */
     protected void setText(int index, String text) {
         labels[index].setText(text);
     }
