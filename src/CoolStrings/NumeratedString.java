@@ -1,16 +1,14 @@
 package CoolStrings;
 
 import GUIs.DrawingPanel;
-
-import javax.swing.*;
 import java.util.ArrayList;
 
 /**
- * Класс, реализующий CoolStrings.CoolString для последовательности чисел
+ * Класс, реализующий интерфейс CoolString для последовательности чисел
  */
 public class NumeratedString extends CoolString {
     /**
-     * Конструктор для отображения чисел elements.
+     * Конструктор для формирования строки из JLabel, содержащей числа elements
      * @param elements Массив чисел, из которых сформируется строка
      * @param elementSize Размер каждого элемента строки
      * @param panel Панель, на которой отображается строка
@@ -28,7 +26,7 @@ public class NumeratedString extends CoolString {
     }
 
     /**
-     * Конструктор для формирования строки из length элементов, хранящих последовательность чисел {0, 1, 2, ...}
+     * Конструктор для формирования строки из JLabel, содержащей числа {0, 1, 2, ...}
      * @param length Длина строки
      * @param elementSize Размер каждого элемента строки
      * @param panel Панель, на которой отображается строка
@@ -43,6 +41,13 @@ public class NumeratedString extends CoolString {
         }
     }
 
+
+    /**
+     * Конструктор для формирования строки из JLabel, содержащей числа elements. Позиция устанавливается в (0, 0)
+     * @param elements Массив чисел, из которых сформируется строка
+     * @param elementSize Размер каждого элемента строки
+     * @param panel Панель, на которой отображается строка
+     */
     public NumeratedString(ArrayList<Integer> elements, int elementSize, DrawingPanel panel) {
         this(elements, elementSize, panel, 0, 0);
     }
