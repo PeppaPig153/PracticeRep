@@ -6,6 +6,10 @@ import javax.swing.*;
 
 public class DrawingPanel extends JLayeredPane {
     Visualizable visualizable;
+    public DrawingPanel() {
+        drawingLayer = new JPanel();
+        add(drawingLayer, PALETTE_LAYER);
+    }
 
     public void setVisualization(Visualizable visualizable) {
         this.visualizable = visualizable;
@@ -15,13 +19,9 @@ public class DrawingPanel extends JLayeredPane {
         return visualizable;
     }
 
-//    @Override
-//    protected void paintComponent(Graphics g) {
-//        super.paintComponent(g);
-//        Graphics2D g2d = (Graphics2D) g;
-////        g2d.drawRect(0,0,100,100);
-//        if (visualizable != null) {
-//            visualizable.visualize(g2d);
-//        }
-//    }
+    public JPanel getDrawingLayer() {
+        return drawingLayer;
+    }
+
+    JPanel drawingLayer;
 }
