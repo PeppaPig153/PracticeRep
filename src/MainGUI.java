@@ -44,12 +44,11 @@ public class MainGUI {
     // Функция инициализации обработчиков нажатий кнопок
     private void addActionListeners() {
         // Добавляем обработчик события при нажатии на кнопку Visualize:
-        // TODO: проверка на то, что поля ввода пустые?
         visualizeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (textField.getText().length() == 0 && textField.getText().length() == 0) {
-                    // TODO: Выводим сообщение об ошибке
+                    // TODO: Выводим сообщение об ошибке?
                 } else {
                     if (drawingPanel.getVisualization() != null) {
                         // Очищаем окно от прошлой визуализации
@@ -58,17 +57,21 @@ public class MainGUI {
                         drawingPanel.repaint();
                     }
                     currentStep = -1;
+                    // Обрезаем строки, если они длиннее 28 символов
+                    String text = textField.getText().length()>28 ?
+                            textField.getText().substring(0,28) : textField.getText();
+                    String pattern = patternField.getText().length()>28 ?
+                            patternField.getText().substring(0,28) : patternField.getText();
                     if (comboBox.getSelectedItem().equals("Naive")) {
-                        NaiveVisualization naiveVisualization = new NaiveVisualization(textField.getText(),
-                                patternField.getText(), drawingPanel, answerLabel);
+                        NaiveVisualization naiveVisualization = new NaiveVisualization(text,
+                                pattern, drawingPanel, answerLabel);
                         drawingPanel.setVisualization(naiveVisualization);
                         stepsNumber = naiveVisualization.getStepsNumber();
                     } else if (comboBox.getSelectedItem().equals("KMP")) {
-                        KMPVisualization kmpVisualization = new KMPVisualization(textField.getText(),
-                                patternField.getText(), drawingPanel, answerLabel);
+                        KMPVisualization kmpVisualization = new KMPVisualization(text,
+                                pattern, drawingPanel, answerLabel);
                         drawingPanel.setVisualization(kmpVisualization);
                         stepsNumber = kmpVisualization.getStepsNumber();
-                        System.out.println(stepsNumber);
                     }
                     update();
                 }

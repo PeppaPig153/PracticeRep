@@ -37,13 +37,7 @@ public class KMPVisualization extends Visualizable {
         panel.add(info);
         info.setBounds(20, 100, 500, 40);
         info.setAutoscrolls(true);
-        info.setText("this is info label");
         stepsNumber = steps.size();
-        for (int i = 0; i < stepsNumber; i++) {
-            System.out.println(steps.get(i).getTextColoredSymbolIndex() + " " + steps.get(i).getPatternColoredSymbolIndex() + " "
-                    + steps.get(i).getPrefixSymbolFrom() + " " + steps.get(i).getPrefixSymbolTo()
-                    + " " + steps.get(i).getPatternPosition() + " " + steps.get(i).getMessage());
-        }
     }
 
     private String KMPAlgorithm(String text, String pattern) {
@@ -114,7 +108,8 @@ public class KMPVisualization extends Visualizable {
     public void visualize(int step) {
     if (step < 0)
         return;
-        labeledText.setX(labeledPattern.getX() - labeledText.getElementSize()*steps.get(step).getPatternPosition());
+//        labeledText.setX(labeledPattern.getX() - labeledText.getElementSize()*steps.get(step).getPatternPosition());
+        labeledPattern.setX(labeledText.getX() + labeledText.getElementSize()*steps.get(step).getPatternPosition());
         // Красим строки полностью в черный:
         labeledPattern.setColor(Color.BLACK.getRGB(), 0, labeledPattern.getElementsNumber());
         labeledText.setColor(Color.BLACK.getRGB(), 0, labeledText.getElementsNumber());
