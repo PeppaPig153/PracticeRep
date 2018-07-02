@@ -1,5 +1,7 @@
 package CoolStrings;
 
+import GUIs.DrawingPanel;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -7,7 +9,7 @@ import java.awt.*;
  * Интерфейс, описывающий строку из JLabel с одинаковым отступом между символами и возможностью изменения цветов конкретных элементов.
  */
 public abstract class CoolString {
-    public CoolString(int elementsNumber, int elementSize, JPanel panel, int x, int y) {
+    public CoolString(int elementsNumber, int elementSize, DrawingPanel panel, int x, int y) {
         this.x = x;
         this.y = y;
         this.basicFontSize = elementSize;
@@ -39,7 +41,7 @@ public abstract class CoolString {
      * Удаляет элемент из панели panel
      * @param panel Панель, из которой удаляется элемент
      */
-    public void removeFromPanel(JPanel panel) {
+    public void removeFromPanel(DrawingPanel panel) {
         for(int i = 0; i < labels.length; ++i)
             panel.remove(labels[i]);
     }
@@ -153,6 +155,11 @@ public abstract class CoolString {
         return labels.length;
     }
 
+    /**
+     * Устанавливает у элемента строки под номером index текст text
+     * @param index Ноемр элемента, у которого меняется значение
+     * @param text Новое значение элемента
+     */
     protected void setText(int index, String text) {
         labels[index].setText(text);
     }

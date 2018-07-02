@@ -2,6 +2,7 @@ package Visualizators;
 
 import CoolStrings.LabeledString;
 import CoolStrings.NumeratedString;
+import GUIs.DrawingPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,7 +22,7 @@ public class NaiveVisualization extends Visualizable {
     private JLabel infoNumeration;
     private NumeratedString numeration;
 
-    public NaiveVisualization(String text, String pattern, JPanel panel, JLabel answer) {
+    public NaiveVisualization(String text, String pattern, DrawingPanel panel, JLabel answer) {
         super(text, pattern, panel);
         answer.setText("Answer: " + NaiveAlgorithm(text, pattern));
         stepsNumber = steps.size();

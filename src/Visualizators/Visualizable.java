@@ -1,7 +1,6 @@
 package Visualizators;
 
-import javax.swing.*;
-import java.awt.*;
+import GUIs.DrawingPanel;
 
 /**
  * Класс, описывающий абстрактный визуализатор
@@ -16,7 +15,7 @@ public abstract class Visualizable {
      * @param pattern Подстрока
      * @param panel Панель, на которой происходит визуализация
      */
-    public Visualizable(String text, String pattern, JPanel panel){
+    public Visualizable(String text, String pattern, DrawingPanel panel){
         this.text = text;
         this.pattern = pattern;
         this.panel = panel;
@@ -25,7 +24,7 @@ public abstract class Visualizable {
         return stepsNumber;
     }
 
-    public JPanel getPanel() {
+    public DrawingPanel getPanel() {
         return panel;
     }
 
@@ -34,5 +33,5 @@ public abstract class Visualizable {
     protected String answer;
     protected int stepsNumber;
 
-    private final JPanel panel;
+    private final DrawingPanel panel;
 }

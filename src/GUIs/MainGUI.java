@@ -1,3 +1,6 @@
+package GUIs;
+
+import GUIs.DrawingPanel;
 import Visualizators.KMPVisualization;
 import Visualizators.NaiveVisualization;
 

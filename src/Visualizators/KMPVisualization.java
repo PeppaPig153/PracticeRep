@@ -2,6 +2,7 @@ package Visualizators;
 
 import CoolStrings.LabeledString;
 import CoolStrings.NumeratedString;
+import GUIs.DrawingPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,9 +27,18 @@ public class KMPVisualization extends Visualizable {
     private JLabel infoPattern;
     private JLabel infoNumeration;
     private JLabel infoPrefix;
+    private DrawingPanel panel;
+    private String text;
+    private String pattern;
+    private DrawingLayer drawingLayer;
 
-    public KMPVisualization(String text, String pattern, JPanel panel, JLabel answer) {
+    public KMPVisualization(String text, String pattern, DrawingPanel panel, JLabel answer) {
         super(text, pattern, panel);
+        drawingLayer = new DrawingLayer();
+        panel.setDrawingLayer(drawingLayer);
+        this.panel = panel;
+        this.text = text;
+        this.pattern = pattern;
         answer.setText("Answer: " + KMPAlgorithm(text, pattern));
         stepsNumber = steps.size();
         // Нумерация символов текста:
@@ -58,13 +68,36 @@ public class KMPVisualization extends Visualizable {
         infoPrefix = new JLabel("Prefix:", SwingConstants.RIGHT);
         panel.add(infoPrefix);
         infoPrefix.setBounds(20,120,60,20);
+
+        panel.setVisible(true);
     }
 
     private ArrayList<Integer> PrefixFunction(String line){
         ArrayList<Integer> result = new ArrayList<Integer>();
-        result.add(new Integer(0)); // Для первого символа значение префикс функции равно 0
-
+        result.add(0); // Для первого символа значение префикс функции равно 0
+        Step step;
+        int[] textColors = new int[text.length()]; // Хранит цвета символов текста
+        int[] patternColors = new int[pattern.length()]; // Шаблона
+        int[] prefixColors = new int[pattern.length()]; // Хранит цвета символов префикс функции
+        int[] prefixNumerationColors = new int[pattern.length()]; // Хранит цвета символов нумерации шаблона
+        for(int i:textColors){
+            i = Color.BLACK.getRGB();
+        }
+        for(int i:patternColors){
+            i = Color.BLACK.getRGB();
+        }
+        for(int i:prefixColors){
+            i = panel.getParent().getBackground().getRGB();
+        }
+        for(int i:prefixNumerationColors){
+            i = Color.BLACK.getRGB();
+        }
+        prefixColors[0] = Color.RED.getRGB();
+        step = new Step(textColors,patternColors,0,prefixColors,prefixNumerationColors);
+        prefixColors[0] = Color.BLACK.getRGB();
+        steps.add(step);
         for(int i = 1 ; i < line.length() ; ++i){
+
             Integer k = result.get(i-1);
             while(k > 0 && line.charAt(i) != line.charAt(k)){
                 k = result.get(k - 1);
@@ -72,6 +105,12 @@ public class KMPVisualization extends Visualizable {
             if(line.charAt(i) == line.charAt(k))
                 ++k;
             result.add(k);
+            prefixColors[i] = Color.RED.getRGB();
+            step = new Step(textColors,patternColors,0,prefixColors,prefixNumerationColors);
+            prefixColors[i] = Color.BLACK.getRGB();
+            step.setPrefixIndex(i);
+            step.setPrefixLength(k);
+            steps.add(step);
         }
 
         return result;
@@ -128,10 +167,10 @@ public class KMPVisualization extends Visualizable {
                 else
                     answer.append(", "+indexInText);
 
-                prefixColors[indexInPattern-1]=Color.BLUE.getRGB();
+                prefixColors[indexInPattern-1]=Color.MAGENTA.getRGB();
                 indexInPattern=prefix.get(indexInPattern-1);
                 indexInText+=pattern.length()-indexInPattern;
-                prefixNumerationColors[indexInPattern]=Color.BLUE.getRGB();
+                prefixNumerationColors[indexInPattern]=Color.MAGENTA.getRGB();
             }
             else {
                 textColors[indexInPattern+indexInText]= Color.RED.getRGB(); // Покрасили не совпавший символ в тексте красным
@@ -141,10 +180,10 @@ public class KMPVisualization extends Visualizable {
                 if(indexInPattern==0)
                     indexInText++;
                 else {
-                    prefixColors[indexInPattern-1]=Color.BLUE.getRGB();
+                    prefixColors[indexInPattern-1]=Color.MAGENTA.getRGB();
                     indexInText+=indexInPattern - prefix.get(indexInPattern - 1);
                     indexInPattern = prefix.get(indexInPattern - 1);
-                    prefixNumerationColors[indexInPattern]=Color.BLUE.getRGB();
+                    prefixNumerationColors[indexInPattern]=Color.MAGENTA.getRGB();
                 }
             }
         }
@@ -168,6 +207,7 @@ public class KMPVisualization extends Visualizable {
         infoPattern.getParent().remove(infoPattern);
         infoNumeration.getParent().remove(infoNumeration);
         infoText.getParent().remove(infoText);
+
     }
 
     @Override
@@ -188,6 +228,9 @@ public class KMPVisualization extends Visualizable {
             labeledPrefix.setColor(step.prefixColors[i], i);
         }
         labeledPattern.setX(labeledText.getX() + labeledText.getElementSize()*step.getPatternPosition());
+        drawingLayer.setPrefixLength(step.getPrefixLength()); // Устанавливаем параметр
+        drawingLayer.setPrefixIndex(step.getPrefixIndex());
+        drawingLayer.repaint(); // Перерисовываем
     }
 
     class Step {
@@ -196,6 +239,8 @@ public class KMPVisualization extends Visualizable {
         private final int[] prefixColors; // Цвета значений префикс-функции
         private final int[] prefixNumerationColors; // Цвета нумерации шаблона в префикс-функции
         private final int patternPosition; // Позиция шаблона относительно символов текста
+        private int prefixLength;
+        private int prefixIndex;
 
         public Step(int[] textColors, int[] patternColors, int patternPosition, int[] prefixColors, int[] prefixNumerationColors) {
             this.textColors = textColors.clone();
@@ -203,6 +248,24 @@ public class KMPVisualization extends Visualizable {
             this.patternPosition = patternPosition;
             this.prefixColors=prefixColors.clone();
             this.prefixNumerationColors=prefixNumerationColors.clone();
+            prefixIndex = 0;
+            prefixIndex = 0;
+        }
+
+        public void setPrefixIndex(int prefixIndex) {
+            this.prefixIndex = prefixIndex;
+        }
+
+        public void setPrefixLength(int prefixLength) {
+            this.prefixLength = prefixLength;
+        }
+
+        public int getPrefixIndex() {
+            return prefixIndex;
+        }
+
+        public int getPrefixLength() {
+            return prefixLength;
         }
 
         public int[] getTextColors() {
@@ -218,4 +281,29 @@ public class KMPVisualization extends Visualizable {
         }
     }
 
+
+    class DrawingLayer extends JPanel {
+
+        @Override
+        public void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            if(prefixLength != 0){
+                g.setColor(Color.RED);
+                g.drawRoundRect(80, 117, 40 + 20*prefixLength - 40, 25, 20, 15);
+                g.setColor(Color.BLUE);
+                g.drawRoundRect(80 + 20*(prefixIndex - prefixLength + 1), 117, 40 + 20*prefixLength - 40, 25, 20, 15);
+                panel.getDrawingLayer().repaint();
+            }
+        }
+        private int prefixLength;
+        private int prefixIndex;
+
+        public void setPrefixIndex(int prefixIndex) {
+            this.prefixIndex = prefixIndex;
+        }
+
+        public void setPrefixLength(int prefixLength) {
+            this.prefixLength = prefixLength;
+        }
+    }
 }
