@@ -38,7 +38,7 @@ public class NaiveVisualization extends Visualizable {
         labeledPattern = new LabeledString(pattern, 20, panel, 80, 60);
         infoPattern = new JLabel("Pattern:", SwingConstants.RIGHT);
         panel.add(infoPattern);
-        infoPattern.setBounds(20,80,60,20);
+        infoPattern.setBounds(20,60,60,20);
     }
 
     private ArrayList<Integer> PrefixFunction(String line){
@@ -124,7 +124,6 @@ public class NaiveVisualization extends Visualizable {
         for (int i = 0; i < labeledPattern.getElementsNumber(); i++) {
             labeledPattern.setColor(steps.get(step).patternColors[i], i);
         }
-//        labeledText.setX(labeledPattern.getX()-steps.get(step).patternPosition*labeledText.getElementSize());
         labeledPattern.setX(labeledText.getX() + labeledText.getElementSize()*steps.get(step).getPatternPosition());
     }
 
