@@ -27,9 +27,15 @@ public class KMPVisualization extends Visualizable {
     private JLabel infoPattern;
     private JLabel infoNumeration;
     private JLabel infoPrefix;
+    private DrawingPanel panel;
+    private String text;
+    private String pattern;
 
     public KMPVisualization(String text, String pattern, DrawingPanel panel, JLabel answer) {
         super(text, pattern, panel);
+        this.panel = panel;
+        this.text = text;
+        this.pattern = pattern;
         answer.setText("Answer: " + KMPAlgorithm(text, pattern));
         stepsNumber = steps.size();
         // Нумерация символов текста:
@@ -64,8 +70,26 @@ public class KMPVisualization extends Visualizable {
     private ArrayList<Integer> PrefixFunction(String line){
         ArrayList<Integer> result = new ArrayList<Integer>();
         result.add(0); // Для первого символа значение префикс функции равно 0
+        Step step;
+        int[] textColors = new int[text.length()]; // Хранит цвета символов текста
+        int[] patternColors = new int[pattern.length()]; // Шаблона
+        int[] prefixColors = new int[pattern.length()]; // Хранит цвета символов префикс функции
+        int[] prefixNumerationColors = new int[pattern.length()]; // Хранит цвета символов нумерации шаблона
+        for(int i:textColors){
+            i = Color.BLACK.getRGB();
+        }
+        for(int i:patternColors){
+            i = Color.BLACK.getRGB();
+        }
+        for(int i:prefixColors){
+            i = Color.BLACK.getRGB();
+        }
+        for(int i:prefixNumerationColors){
+            i = Color.BLACK.getRGB();
+        }
 
         for(int i = 1 ; i < line.length() ; ++i){
+
             Integer k = result.get(i-1);
             while(k > 0 && line.charAt(i) != line.charAt(k)){
                 k = result.get(k - 1);
@@ -73,6 +97,10 @@ public class KMPVisualization extends Visualizable {
             if(line.charAt(i) == line.charAt(k))
                 ++k;
             result.add(k);
+            step = new Step(textColors,patternColors,0,prefixColors,prefixNumerationColors);
+            step.setPrefixIndex(i);
+            step.setPrefixLength(k);
+            steps.add(step);
         }
 
         return result;
@@ -169,6 +197,7 @@ public class KMPVisualization extends Visualizable {
         infoPattern.getParent().remove(infoPattern);
         infoNumeration.getParent().remove(infoNumeration);
         infoText.getParent().remove(infoText);
+
     }
 
     @Override
@@ -189,6 +218,21 @@ public class KMPVisualization extends Visualizable {
             labeledPrefix.setColor(step.prefixColors[i], i);
         }
         labeledPattern.setX(labeledText.getX() + labeledText.getElementSize()*step.getPatternPosition());
+        int prefixLength = step.getPrefixLength();
+        int prefixIndex = step.getPrefixIndex();
+
+        if(prefixLength != 0){
+
+
+            Graphics g = panel.getGraphics();
+            g.clear();
+            panel.paintComponents(g);
+            g.setColor(Color.RED);
+            g.drawRoundRect(80, 115, 40 + 20*prefixLength, 25, 20, 15);
+
+
+        }
+
     }
 
     class Step {
@@ -197,6 +241,8 @@ public class KMPVisualization extends Visualizable {
         private final int[] prefixColors; // Цвета значений префикс-функции
         private final int[] prefixNumerationColors; // Цвета нумерации шаблона в префикс-функции
         private final int patternPosition; // Позиция шаблона относительно символов текста
+        private int prefixLength;
+        private int prefixIndex;
 
         public Step(int[] textColors, int[] patternColors, int patternPosition, int[] prefixColors, int[] prefixNumerationColors) {
             this.textColors = textColors.clone();
@@ -204,6 +250,24 @@ public class KMPVisualization extends Visualizable {
             this.patternPosition = patternPosition;
             this.prefixColors=prefixColors.clone();
             this.prefixNumerationColors=prefixNumerationColors.clone();
+            prefixIndex = 0;
+            prefixIndex = 0;
+        }
+
+        public void setPrefixIndex(int prefixIndex) {
+            this.prefixIndex = prefixIndex;
+        }
+
+        public void setPrefixLength(int prefixLength) {
+            this.prefixLength = prefixLength;
+        }
+
+        public int getPrefixIndex() {
+            return prefixIndex;
+        }
+
+        public int getPrefixLength() {
+            return prefixLength;
         }
 
         public int[] getTextColors() {
