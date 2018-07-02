@@ -30,6 +30,7 @@ public class NaiveVisualization extends Visualizable {
         infoNumeration = new JLabel("i:", SwingConstants.RIGHT);
         panel.add(infoNumeration);
         infoNumeration.setBounds(20,20,60,20);
+        // Строка и шаблон:
         labeledText = new LabeledString(text, 20, panel, 80, 40);
         infoText = new JLabel("Text:", SwingConstants.RIGHT);
         panel.add(infoText);
@@ -40,6 +41,23 @@ public class NaiveVisualization extends Visualizable {
         infoPattern.setBounds(20,80,60,20);
     }
 
+    private ArrayList<Integer> PrefixFunction(String line){
+        ArrayList<Integer> result = new ArrayList<Integer>();
+        result.add(new Integer(0)); // Для первого символа значение префикс функции равно 0
+
+        for(int i = 1 ; i < line.length() ; ++i){
+            Integer k = result.get(i-1);
+            while(k > 0 && line.charAt(i) != line.charAt(k)){
+                k = result.get(k - 1);
+            }
+            if(line.charAt(i) == line.charAt(k))
+                ++k;
+            result.add(k);
+        }
+
+        return result;
+    }
+
     private String NaiveAlgorithm(String text, String pattern) {
         int[] textColors = new int[text.length()]; // Хранит цвета символов текста
         int[] patternColors = new int[pattern.length()]; // Шаблона
@@ -47,13 +65,15 @@ public class NaiveVisualization extends Visualizable {
         StringBuilder answer = new StringBuilder(); // Строка, хранящая результат работы алгоритма
 
         for (int i = 0; i <= text.length() - pattern.length(); ++i) { // Перебор всех возможных вариантов вхождения шаблона в строку
-            for(int k=0; k<textColors.length; ++k){ // Красим все символы текста в чёрный
-                textColors[k]=Color.BLACK.getRGB();
+            if(i!=0) {
+                for (int k = 0; k < textColors.length; ++k) { // Красим все символы текста в чёрный
+                    textColors[k] = Color.BLACK.getRGB();
+                }
+                for (int k = 0; k < patternColors.length; ++k) { // Красим все символы шаблона в чёрный
+                    patternColors[k] = Color.BLACK.getRGB();
+                }
+                steps.add(new Step(textColors, patternColors, i)); // Добавили изменения
             }
-            for(int k=0; k<patternColors.length; ++k){ // Красим все символы шаблона в чёрный
-                patternColors[k]=Color.BLACK.getRGB();
-            }
-            steps.add(new Step(textColors, patternColors, i)); // Добавили изменения
 
             int j=0;
             while(j<pattern.length() && pattern.charAt(j)==text.charAt(j+i)) { // Сравнение символов в соответствующих индексах
@@ -82,6 +102,7 @@ public class NaiveVisualization extends Visualizable {
 
         return answer.toString();
     }
+
 
     @Override
     public void clear() {
