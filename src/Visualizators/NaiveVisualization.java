@@ -31,10 +31,10 @@ public class NaiveVisualization extends Visualizable {
         StringBuilder answer = new StringBuilder(); // Строка, хранящая результат работы алгоритма
 
         for (int i = 0; i <= text.length() - pattern.length(); ++i) { // Перебор всех возможных вариантов вхождения шаблона в строку
-            for(int k=0; k<text.length(); ++k){ // Красим все символы текста в чёрный
+            for(int k=0; k<textColors.length; ++k){ // Красим все символы текста в чёрный
                 textColors[k]=Color.BLACK.getRGB();
             }
-            for(int k=0; k<pattern.length(); ++k){ // Красим все символы шаблона в чёрный
+            for(int k=0; k<patternColors.length; ++k){ // Красим все символы шаблона в чёрный
                 patternColors[k]=Color.BLACK.getRGB();
             }
             steps.add(new Step(textColors, patternColors, i)); // Добавили изменения
