@@ -43,7 +43,7 @@ public class NaiveVisualization extends Visualizable {
 
     private ArrayList<Integer> PrefixFunction(String line){
         ArrayList<Integer> result = new ArrayList<Integer>();
-        result.add(new Integer(0)); // Для первого символа значение префикс функции равно 0
+        result.add(0); // Для первого символа значение префикс функции равно 0
 
         for(int i = 1 ; i < line.length() ; ++i){
             Integer k = result.get(i-1);

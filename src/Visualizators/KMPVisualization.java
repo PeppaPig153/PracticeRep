@@ -31,9 +31,8 @@ public class KMPVisualization extends Visualizable {
         super(text, pattern, panel);
         answer.setText("Answer: " + KMPAlgorithm(text, pattern));
         stepsNumber = steps.size();
-        // Нумерация символов строки:
+        // Нумерация символов текста:
         numeration = new NumeratedString(text.length(), 20, panel, 80, 20);
-        numerationPrefix = new NumeratedString(pattern.length(), 20, panel, 80, 160);
         infoNumeration = new JLabel("i:", SwingConstants.RIGHT);
         panel.add(infoNumeration);
         infoNumeration.setBounds(20,20,60,20);
@@ -43,15 +42,22 @@ public class KMPVisualization extends Visualizable {
         panel.add(infoText);
         infoText.setBounds(20,40,60,20);
         labeledPattern = new LabeledString(pattern, 20, panel, 80, 60);
-        labeledPatternForPrefix = new LabeledString(pattern, 20, panel, 80, 180);
         infoPattern = new JLabel("Pattern:", SwingConstants.RIGHT);
         panel.add(infoPattern);
         infoPattern.setBounds(20,60,60,20);
+
+
+        // Для отображения префикс-функции шаблона:
+        // Нумерация:
+        numerationPrefix = new NumeratedString(pattern.length(), 20, panel, 80, 100);
+        // Шаблон:
+        labeledPatternForPrefix = new LabeledString(pattern, 20, panel, 80, 120);
         // Значения префикс-функции:
-        labeledPrefix = new NumeratedString(prefix, 20, panel, 80, 200);
+        labeledPrefix = new NumeratedString(prefix, 20, panel, 80, 140);
+        // Подпись:
         infoPrefix = new JLabel("Prefix:", SwingConstants.RIGHT);
         panel.add(infoPrefix);
-        infoPrefix.setBounds(20,150,60,20);
+        infoPrefix.setBounds(20,120,60,20);
     }
 
     private ArrayList<Integer> PrefixFunction(String line){
@@ -160,16 +166,23 @@ public class KMPVisualization extends Visualizable {
     }
 
     @Override
-    public void visualize(int step) {
-        if (step < 0)
+    public void visualize(int stepNumber) {
+        if (stepNumber < 0)
             return;
+        Step step = steps.get(stepNumber);
         for (int i = 0; i < labeledText.getElementsNumber(); i++) {
-            labeledText.setColor(steps.get(step).textColors[i], i);
+            labeledText.setColor(step.textColors[i], i);
         }
         for (int i = 0; i < labeledPattern.getElementsNumber(); i++) {
-            labeledPattern.setColor(steps.get(step).patternColors[i], i);
+            labeledPattern.setColor(step.patternColors[i], i);
         }
-        labeledPattern.setX(labeledText.getX() + labeledText.getElementSize()*steps.get(step).getPatternPosition());
+        for(int i = 0; i < numerationPrefix.getElementsNumber(); ++i) {
+            numerationPrefix.setColor(step.prefixNumerationColors[i], i);
+        }
+        for (int i = 0; i < labeledPrefix.getElementsNumber(); i++) {
+            labeledPrefix.setColor(step.prefixColors[i], i);
+        }
+        labeledPattern.setX(labeledText.getX() + labeledText.getElementSize()*step.getPatternPosition());
     }
 
     class Step {
