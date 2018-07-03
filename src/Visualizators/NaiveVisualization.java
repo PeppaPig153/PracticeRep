@@ -106,19 +106,20 @@ public class NaiveVisualization extends Visualizable {
     }
 
     @Override
-    public void visualize(int step) {
-        if (step < 0)
+    public void visualize(int stepNumber) {
+        if (stepNumber < 0)
             return;
+        Step step = steps.get(stepNumber);
         for (int i = 0; i < labeledText.getElementsNumber(); i++) {
-            labeledText.setColor(steps.get(step).textColors[i], i);
+            labeledText.setColor(step.textColors[i], i);
         }
         for (int i = 0; i < labeledPattern.getElementsNumber(); i++) {
-            labeledPattern.setColor(steps.get(step).patternColors[i], i);
+            labeledPattern.setColor(step.patternColors[i], i);
         }
         for(int i = 0; i < numeration.getElementsNumber(); ++i) {
-            numeration.setColor(steps.get(step).numerationColors[i], i);
+            numeration.setColor(step.numerationColors[i], i);
         }
-        labeledPattern.setX(labeledText.getX() + labeledText.getElementSize()*steps.get(step).patternPosition);
+        labeledPattern.setX(labeledText.getX() + labeledText.getElementSize()*step.patternPosition);
     }
 
     class Step {
