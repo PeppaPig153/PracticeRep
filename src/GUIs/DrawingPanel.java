@@ -6,17 +6,19 @@ import javax.swing.*;
 
 /**
  * Класс, описывающий компоненту, расширяющую JLayeredPane, в которой происходит отображение визуализации алгоритма.
+ * Добавляемые компоненты по умолчанию располагаются на нулевом(самом нижнем) уровне, а рисующий слой - на первом уровне(устанавливается с помощью setDrawingLayer)
  */
 public class DrawingPanel extends JLayeredPane {
     public DrawingPanel() {
         setBorder(BorderFactory.createLoweredBevelBorder());
+        new JPanel();
     }
 
-    public void setVisualization(Visualizable visualizable) {
+    void setVisualization(Visualizable visualizable) {
         this.visualizable = visualizable;
     }
 
-    public Visualizable getVisualization() {
+    Visualizable getVisualization() {
         return visualizable;
     }
 
