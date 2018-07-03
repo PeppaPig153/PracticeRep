@@ -35,6 +35,7 @@ public class MainGUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
         frame.setResizable(false);
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         // Добавляем в него форму, сконструированную с помощью IDEA:
         frame.setContentPane(MajorPanel);

@@ -92,7 +92,7 @@ public class KMPVisualization extends Visualizable {
         for(int i:prefixNumerationColors){
             i = Color.BLACK.getRGB();
         }
-        prefixColors[0] = Color.RED.getRGB();
+        prefixColors[0] = Color.GREEN.getRGB();
         step = new Step(textColors,patternColors,0,prefixColors,prefixNumerationColors);
         prefixColors[0] = Color.BLACK.getRGB();
         steps.add(step);
@@ -105,7 +105,7 @@ public class KMPVisualization extends Visualizable {
             if(line.charAt(i) == line.charAt(k))
                 ++k;
             result.add(k);
-            prefixColors[i] = Color.RED.getRGB();
+            prefixColors[i] = Color.GREEN.getRGB();
             step = new Step(textColors,patternColors,0,prefixColors,prefixNumerationColors);
             prefixColors[i] = Color.BLACK.getRGB();
             step.setPrefixIndex(i);
