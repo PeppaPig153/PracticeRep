@@ -5,6 +5,7 @@ import CoolStrings.NumeratedString;
 import GUIs.DrawingPanel;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -12,24 +13,22 @@ import java.util.ArrayList;
  * Класс-визуализатор для алгоритма КМП
  */
 public class KMPVisualization extends Visualizable {
-    // Поле для хранения информации для визуализации шагов
-    private ArrayList<Step> steps;
-    // Результат вычислений префикс-функции:
-    private ArrayList<Integer> prefix;
+    private ArrayList<Step> steps; // Поле для хранения информации для визуализации шагов
+    private ArrayList<Integer> prefix; // Результат вычислений префикс-функции:
     // Строки из JLabel для отображения шагов:
-    private LabeledString labeledText; // Для отражения текста
-    private LabeledString labeledPattern; // Для отражения шаблона
-    private LabeledString labeledPatternForPrefix; // Для отражения шаблона в префикс функции
-    private NumeratedString labeledPrefix; // Для отражения значений префикс функции
-    private NumeratedString numeration; // Для отражения индексов текста
-    private NumeratedString numerationPrefix; // Для отражения индексов шаблона в префикс функции
-    private JLabel infoText; // Для отражения "Text:"
-    private JLabel infoPattern; // Для отражения "Pattern:"
-    private JLabel infoNumeration; // Для отражения "Index:"
-    private JLabel infoPrefix; // Для отражения "Prefix Function:"
-    private JLabel infoPatternForPrefix; // Для отражения "Pattern:" в префикс функции
-    private JLabel infoNumerationForPrefix; // Для отражения "Index:" в префикс функции
-    private JLabel infoPi; // Для отражения "π:" в префикс функции
+    private LabeledString labeledText; // Для отображения текста
+    private LabeledString labeledPattern; // Для отображения шаблона
+    private LabeledString labeledPatternForPrefix; // Для отображения шаблона в префикс функции
+    private NumeratedString labeledPrefix; // Для отображения значений префикс функции
+    private NumeratedString numeration; // Для отображения индексов текста
+    private NumeratedString numerationPrefix; // Для отображения индексов шаблона в префикс функции
+    private JLabel infoText; // Для отображения "Text:"
+    private JLabel infoPattern; // Для отображения "Pattern:"
+    private JLabel infoNumeration; // Для отображения "Index:"
+    private JLabel infoPrefix; // Для отображения "Prefix Function:"
+    private JLabel infoPatternForPrefix; // Для отображения "Pattern:" в префикс функции
+    private JLabel infoNumerationForPrefix; // Для отображения "Index:" в префикс функции
+    private JLabel infoPi; // Для отображения "π:" в префикс функции
     private DrawingPanel panel; // Панель на которой происходит отображение
     private String text; // Текст
     private String pattern; // Шаблон
@@ -80,62 +79,57 @@ public class KMPVisualization extends Visualizable {
         infoPi = new JLabel("π:", SwingConstants.RIGHT);
         panel.add(infoPi);
         infoPi.setBounds(10,190,60,20);
-
         panel.setVisible(true);
     }
 
-    private ArrayList<Integer> PrefixFunction(String line){
+    private ArrayList<Integer> PrefixFunction(String line){ // Вычисление префикс функции
         ArrayList<Integer> result = new ArrayList<>();
         int[] numerationColors = new int[text.length()]; // нумерации текста
-
         for(int k=0; k<numerationColors.length; ++k)
             numerationColors[k] = Color.BLACK.getRGB();
-
         result.add(0); // Для первого символа значение префикс функции равно 0
         Step step;
         int[] textColors = new int[text.length()]; // Хранит цвета символов текста
-        int[] patternColors = new int[pattern.length()]; // Шаблона
+        int[] patternColors = new int[pattern.length()]; //Хранит цвета символов шаблона
         int[] prefixColors = new int[pattern.length()]; // Хранит цвета символов префикс функции
         int[] prefixNumerationColors = new int[pattern.length()]; // Хранит цвета символов нумерации шаблона
-        for(int i : textColors){
+      
+        // Инициализация строк начальными значениями (черный цвет)
+        for(int i : textColors)
             i = Color.BLACK.getRGB();
-        }
-        for(int i : patternColors){
+        for(int i : patternColors)
             i = Color.BLACK.getRGB();
-        }
-        for(int i : prefixColors){
+        for(int i : prefixColors)
             i = panel.getParent().getBackground().getRGB();
-        }
-        for(int i : prefixNumerationColors){
+        for(int i : prefixNumerationColors)
             i = Color.BLACK.getRGB();
-        }
-        prefixColors[0] = Color.GREEN.getRGB();
+          
+        prefixColors[0] = Color.GREEN.getRGB(); // Выделение результата вычисления
         step = new Step(textColors,patternColors,0,prefixColors,prefixNumerationColors, numerationColors);
         prefixColors[0] = Color.BLACK.getRGB();
         steps.add(step);
         for(int i = 1 ; i < line.length() ; ++i){
-
             Integer k = result.get(i-1);
-            while(k > 0 && line.charAt(i) != line.charAt(k)){
+            while(k > 0 && line.charAt(i) != line.charAt(k)) // Сравниваем текущий символ из строки с символом из шаблона
                 k = result.get(k - 1);
-            }
-            if(line.charAt(i) == line.charAt(k))
+            if(line.charAt(i) == line.charAt(k)) // Если совпали, то значение префикс функции на 1 больше индекса
                 ++k;
-            result.add(k);
-            prefixColors[i] = Color.GREEN.getRGB();
+            result.add(k); // Сохраняем результат
+            prefixColors[i] = Color.GREEN.getRGB(); // Выделение результата вычисления
             step = new Step(textColors,patternColors,0,prefixColors,prefixNumerationColors, numerationColors);
             prefixColors[i] = Color.BLACK.getRGB();
-            step.prefixIndex = i;
+
+            step.prefixIndex = i; // Параметры для выделения подстрок при вычислении
             step.prefixLength = k;
             steps.add(step);
         }
-
         return result;
     }
 
     private String KMPAlgorithm(String text, String pattern) {
-        StringBuilder answer = new StringBuilder();
+        StringBuilder answer = new StringBuilder(); // Результат – строка с индексами
         steps = new ArrayList<>();
+
         int[] textColors = new int[text.length()]; // Хранит цвета символов текста
         int[] patternColors = new int[pattern.length()]; // Шаблона
         int[] prefixColors = new int[pattern.length()]; // Хранит цвета символов префикс функции
@@ -179,14 +173,15 @@ public class KMPVisualization extends Visualizable {
                 steps.add(new Step(textColors, patternColors, indexInText,prefixColors,prefixNumerationColors, numerationColors)); // Добавили изменения
                 indexInPattern++;
             }
-
             if(indexInPattern==pattern.length()){ // Если был найден индекс вхождения
                 if(answer.length()==0)
-                    answer.append(indexInText);
+                    answer.append(indexInText); // Добавляем индекс в строку с результатом
                 else
-                    answer.append(", ").append(indexInText);
 
-                numerationColors[indexInText]=Color.MAGENTA.getRGB();
+                    answer.append(", ").append(indexInText); // Добавляем индекс в строку с результатом
+ 
+                numerationColors[indexInText]=Color.MAGENTA.getRGB(); // Подстветка добавленного индекса
+              
                 if(indexInText+pattern.length()==text.length())
                     steps.add(new Step(textColors, patternColors, indexInText,prefixColors,prefixNumerationColors, numerationColors)); // Добавили изм
                 prefixColors[indexInPattern-1]=Color.MAGENTA.getRGB();
@@ -202,17 +197,15 @@ public class KMPVisualization extends Visualizable {
                 if(indexInPattern==0)
                     indexInText++;
                 else {
-                    prefixColors[indexInPattern-1]=Color.MAGENTA.getRGB();
-                    indexInText+=indexInPattern - prefix.get(indexInPattern - 1);
+                    prefixColors[indexInPattern-1]=Color.MAGENTA.getRGB(); // Красим значение префикс функции
+                    indexInText+=indexInPattern - prefix.get(indexInPattern - 1); // Двигаем шаблон
                     indexInPattern = prefix.get(indexInPattern - 1);
-                    prefixNumerationColors[indexInPattern]=Color.MAGENTA.getRGB();
+                    prefixNumerationColors[indexInPattern]=Color.MAGENTA.getRGB(); // Красим индекс префикс функции
                 }
             }
         }
-
-        if(answer.length()==0){
-            answer.append("-1");
-        }
+        if(answer.length()==0)
+            answer.append("-1"); // Ответ -1 если не найдено вхождений
 
         return answer.toString();
     }
@@ -254,8 +247,9 @@ public class KMPVisualization extends Visualizable {
         for(int i = 0; i < numeration.getElementsNumber(); ++i) {
             numeration.setColor(step.numerationColors[i], i);
         }
+
         labeledPattern.setX(labeledText.getX() + labeledText.getElementSize()*step.patternPosition);
-        drawingLayer.setPrefixLength(step.prefixLength); // Устанавливаем параметр
+        drawingLayer.setPrefixLength(step.prefixLength); // Устанавливаем параметры
         drawingLayer.setPrefixIndex(step.prefixIndex);
         drawingLayer.repaint(); // Перерисовываем
     }
@@ -267,8 +261,8 @@ public class KMPVisualization extends Visualizable {
         final int[] prefixNumerationColors; // Цвета нумерации шаблона в префикс-функции
         final int patternPosition; // Позиция шаблона относительно символов текста
         final int[] numerationColors; // Цвета индексов текста
-        int prefixLength;
-        int prefixIndex;
+        int prefixLength; // Длина совпавшего префикса и суффикса
+        int prefixIndex; // Текущий индекс в шаблоне
 
         Step(int[] textColors, int[] patternColors, int patternPosition, int[] prefixColors, int[] prefixNumerationColors, int[] numerationColors) {
             this.textColors = textColors.clone();
@@ -281,22 +275,21 @@ public class KMPVisualization extends Visualizable {
         }
     }
 
-
     class DrawingLayer extends JPanel {
 
         @Override
         public void paintComponent(Graphics g) {
-            super.paintComponent(g);
+            super.paintComponent(g); // Отрисовка всей панели
             if(prefixLength != 0){
-                g.setColor(Color.RED);
+                g.setColor(Color.RED); // Отрисовка красного овала
                 g.drawRoundRect(80, 168, 40 + 20*prefixLength - 40, 25, 20, 15);
-                g.setColor(Color.BLUE);
+                g.setColor(Color.BLUE); // Отрисовка синего овала
                 g.drawRoundRect(80 + 20*(prefixIndex - prefixLength + 1), 168, 40 + 20*prefixLength - 40, 25, 20, 15);
                 panel.getDrawingLayer().repaint();
             }
         }
-        private int prefixLength;
-        private int prefixIndex;
+        private int prefixLength;// Длина совпавшего префикса и суффикса
+        private int prefixIndex; // Текущий индекс в шаблоне
 
         void setPrefixIndex(int prefixIndex) {
             this.prefixIndex = prefixIndex;
