@@ -35,6 +35,7 @@ public class MainGUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
         frame.setResizable(false);
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         // Добавляем в него форму, сконструированную с помощью IDEA:
         frame.setContentPane(MajorPanel);
@@ -42,17 +43,17 @@ public class MainGUI {
         drawingPanel.setLayout(null);
         // Приветственное сообщение:
         infoLabel = new JLabel( "<html>" +
-                "Эта программа визуализирует наивный алгоритм и алгоритм КМП поиска шаблона в строке.<br>" +
-                "Строка вводится в поле \"Text\", шаблон - в поле \"Pattern\".<br>" +
-                "Длина вводимых строк не должна превышать " + TEXT_MAX_SIZE + " символов;<br>" +
-                "Слишком длинные строки обрезаются до максимально допустимого размера.<br>" +
-                "Для того, чтобы сгенерировать визуализацию, необходимо нажать кнопку \"Visualize\".<br>" +
-                "Для автоматического показа визуализации нужно необходимо нажать кнопку \"Start\";<br>" +
-                "Для того, чтобы остановить автоматический показ, нажмите кнопку \"Pause\".<br>" +
-                "Кнопка для перехода на следующий шаг - \"Next\", на предыдущий - \"Prev\".<br>" +
+                "▶Данная программа визуализирует наивный алгоритм и алгоритм КМП поиска шаблона в строке◀<br><br>" +
+                "&emsp > Строка вводится в поле \"Text\", шаблон - в поле \"Pattern\"<br><br>" +
+                "&emsp > Длина вводимых строк не должна превышать " + TEXT_MAX_SIZE + " символов<br><br>" +
+                "&emsp > Слишком длинные строки обрезаются до максимально допустимого размера.<br><br>" +
+                "&emsp > Для того, чтобы сгенерировать визуализацию, необходимо нажать кнопку \"Visualize\"<br><br>" +
+                "&emsp > Для автоматического показа визуализации нужно необходимо нажать кнопку \"Start\"<br><br>" +
+                "&emsp > Для того, чтобы остановить автоматический показ, нажмите кнопку \"Pause\"<br><br>" +
+                "&emsp > Кнопка для перехода на следующий шаг - \"Next\", на предыдущий - \"Prev\"<br><br>" +
                 "</html>");
         drawingPanel.add(infoLabel);
-        infoLabel.setBounds(20, 20, FRAME_WIDTH-40, 160);
+        infoLabel.setBounds(20, 20, FRAME_WIDTH-40, 240);
         infoLabel.setVerticalAlignment(SwingConstants.TOP);
         // Метка для ответа:
         answerLabel = new JLabel("");
