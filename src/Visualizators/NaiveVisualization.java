@@ -15,12 +15,12 @@ public class NaiveVisualization extends Visualizable {
     // Поле для хранения информации для визуализации шагов
     private ArrayList<Step> steps;
     // Строки из JLabel для отображения шагов:
-    private LabeledString labeledText;
-    private LabeledString labeledPattern;
-    private JLabel infoText;
-    private JLabel infoPattern;
-    private JLabel infoNumeration;
-    private NumeratedString numeration;
+    private LabeledString labeledText; // Для отражения текста
+    private LabeledString labeledPattern; // Для отражения шаблона
+    private JLabel infoText; // Для отражения "Text:"
+    private JLabel infoPattern; // Для отражения "Pattern:"
+    private JLabel infoNumeration; // Для отражения "Index:"
+    private NumeratedString numeration; // Для отражения индексов текста
 
     public NaiveVisualization(String text, String pattern, DrawingPanel panel, JLabel answer) {
         super(text, pattern, panel);
@@ -28,18 +28,18 @@ public class NaiveVisualization extends Visualizable {
         stepsNumber = steps.size();
         // Нумерация символов строки:
         numeration = new NumeratedString(text.length(), 20, panel, 80, 20);
-        infoNumeration = new JLabel("i:", SwingConstants.RIGHT);
+        infoNumeration = new JLabel("Index:", SwingConstants.RIGHT);
         panel.add(infoNumeration);
-        infoNumeration.setBounds(20,20,60,20);
+        infoNumeration.setBounds(10,20,60,20);
         // Строка и шаблон:
         labeledText = new LabeledString(text, 20, panel, 80, 40);
         infoText = new JLabel("Text:", SwingConstants.RIGHT);
         panel.add(infoText);
-        infoText.setBounds(20,40,60,20);
+        infoText.setBounds(10,40,60,20);
         labeledPattern = new LabeledString(pattern, 20, panel, 80, 60);
         infoPattern = new JLabel("Pattern:", SwingConstants.RIGHT);
         panel.add(infoPattern);
-        infoPattern.setBounds(20,60,60,20);
+        infoPattern.setBounds(10,60,60,20);
     }
 
     private String NaiveAlgorithm(String text, String pattern) {
@@ -67,7 +67,7 @@ public class NaiveVisualization extends Visualizable {
                 j++;
             }
 
-            if(j==pattern.length()){ // Если был найден индекс вхождения
+            if(j==pattern.length()){ // Если был найден индекс вхождения, добавляем его в ответ
                 if(answer.length()==0)
                     answer.append(i);
                 else

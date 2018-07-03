@@ -17,20 +17,23 @@ public class KMPVisualization extends Visualizable {
     // Результат вычислений префикс-функции:
     private ArrayList<Integer> prefix;
     // Строки из JLabel для отображения шагов:
-    private LabeledString labeledText;
-    private LabeledString labeledPattern;
-    private LabeledString labeledPatternForPrefix;//
-    private NumeratedString labeledPrefix;///
-    private NumeratedString numeration;
-    private NumeratedString numerationPrefix;//
-    private JLabel infoText;
-    private JLabel infoPattern;
-    private JLabel infoNumeration;
-    private JLabel infoPrefix;
-    private DrawingPanel panel;
-    private String text;
-    private String pattern;
-    private DrawingLayer drawingLayer;
+    private LabeledString labeledText; // Для отражения текста
+    private LabeledString labeledPattern; // Для отражения шаблона
+    private LabeledString labeledPatternForPrefix; // Для отражения шаблона в префикс функции
+    private NumeratedString labeledPrefix; // Для отражения значений префикс функции
+    private NumeratedString numeration; // Для отражения индексов текста
+    private NumeratedString numerationPrefix; // Для отражения индексов шаблона в префикс функции
+    private JLabel infoText; // Для отражения "Text:"
+    private JLabel infoPattern; // Для отражения "Pattern:"
+    private JLabel infoNumeration; // Для отражения "Index:"
+    private JLabel infoPrefix; // Для отражения "Prefix Function:"
+    private JLabel infoPatternForPrefix; // Для отражения "Pattern:" в префикс функции
+    private JLabel infoNumerationForPrefix; // Для отражения "Index:" в префикс функции
+    private JLabel infoPi; // Для отражения "π:" в префикс функции
+    private DrawingPanel panel; // Панель на которой происходит отображение
+    private String text; // Текст
+    private String pattern; // Шаблон
+    private DrawingLayer drawingLayer; // Слой для прорисовки овалов
 
     public KMPVisualization(String text, String pattern, DrawingPanel panel, JLabel answer) {
         super(text, pattern, panel);
@@ -43,31 +46,40 @@ public class KMPVisualization extends Visualizable {
         stepsNumber = steps.size();
         // Нумерация символов текста:
         numeration = new NumeratedString(text.length(), 20, panel, 80, 20);
-        infoNumeration = new JLabel("i:", SwingConstants.RIGHT);
+        infoNumeration = new JLabel("Index:", SwingConstants.RIGHT);
         panel.add(infoNumeration);
-        infoNumeration.setBounds(20,20,60,20);
+        infoNumeration.setBounds(10,20,60,20);
         // Строка и шаблон:
         labeledText = new LabeledString(text, 20, panel, 80, 40);
         infoText = new JLabel("Text:", SwingConstants.RIGHT);
         panel.add(infoText);
-        infoText.setBounds(20,40,60,20);
+        infoText.setBounds(10,40,60,20);
         labeledPattern = new LabeledString(pattern, 20, panel, 80, 60);
         infoPattern = new JLabel("Pattern:", SwingConstants.RIGHT);
         panel.add(infoPattern);
-        infoPattern.setBounds(20,60,60,20);
+        infoPattern.setBounds(10,60,60,20);
 
 
         // Для отображения префикс-функции шаблона:
         // Нумерация:
-        numerationPrefix = new NumeratedString(pattern.length(), 20, panel, 80, 100);
+        numerationPrefix = new NumeratedString(pattern.length(), 20, panel, 80, 150);
         // Шаблон:
-        labeledPatternForPrefix = new LabeledString(pattern, 20, panel, 80, 120);
+        labeledPatternForPrefix = new LabeledString(pattern, 20, panel, 80, 170);
         // Значения префикс-функции:
-        labeledPrefix = new NumeratedString(prefix, 20, panel, 80, 140);
-        // Подпись:
-        infoPrefix = new JLabel("Prefix:", SwingConstants.RIGHT);
+        labeledPrefix = new NumeratedString(prefix, 20, panel, 80, 190);
+        // Подписи:
+        infoPrefix = new JLabel("Prefix Function:", SwingConstants.RIGHT);
         panel.add(infoPrefix);
-        infoPrefix.setBounds(20,120,60,20);
+        infoPrefix.setBounds(20,120,90,20);
+        infoPatternForPrefix = new JLabel("Pattern:", SwingConstants.RIGHT);
+        panel.add(infoPatternForPrefix);
+        infoPatternForPrefix.setBounds(10,170,60,20);
+        infoNumerationForPrefix = new JLabel("Index:", SwingConstants.RIGHT);
+        panel.add(infoNumerationForPrefix);
+        infoNumerationForPrefix.setBounds(10,150,60,20);
+        infoPi = new JLabel("π:", SwingConstants.RIGHT);
+        panel.add(infoPi);
+        infoPi.setBounds(10,190,60,20);
 
         panel.setVisible(true);
     }
@@ -205,7 +217,10 @@ public class KMPVisualization extends Visualizable {
         labeledPrefix.removeFromPanel(getPanel());
         infoPrefix.getParent().remove(infoPrefix);
         infoPattern.getParent().remove(infoPattern);
+        infoPatternForPrefix.getParent().remove(infoPatternForPrefix);
         infoNumeration.getParent().remove(infoNumeration);
+        infoNumerationForPrefix.getParent().remove(infoNumerationForPrefix);
+        infoPi.getParent().remove(infoPi);
         infoText.getParent().remove(infoText);
 
     }
