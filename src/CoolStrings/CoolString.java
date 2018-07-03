@@ -10,9 +10,12 @@ import java.awt.*;
  */
 public abstract class CoolString {
     public CoolString(int elementsNumber, int elementSize, DrawingPanel panel, int x, int y) {
+        // Позиция:
         this.x = x;
         this.y = y;
+        // Размер шрифта:
         this.basicFontSize = elementSize;
+        // Размер элемента:
         this.elementSize = elementSize;
         labels = new JLabel[elementsNumber];
         for (int i = 0; i < elementsNumber; ++i) {
@@ -164,10 +167,19 @@ public abstract class CoolString {
         labels[index].setText(text);
     }
 
+    /**
+     * Возвращает размер шрифта для элемента строки, содержащего 1 символ
+     * @return Размер шрифта для элемента строки, содержащего 1 символ
+     */
     protected int getBasicFontSize() {
         return basicFontSize;
     }
 
+    /**
+     * Устанавливает размер шрифта для символов элемента index строки
+      * @param index Элемент строки, размер шрифта которого необходимо изменить
+     * @param fontSize Новое значение размера шрифта
+     */
     protected void setFontSize(int index, int fontSize) {
         labels[index].setFont(new Font("Arial", 1, fontSize));
     }

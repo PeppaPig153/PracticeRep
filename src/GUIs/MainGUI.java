@@ -45,7 +45,7 @@ public class MainGUI {
                 "Эта программа визуализирует наивный алгоритм и алгоритм КМП поиска шаблона в строке.<br>" +
                 "Строка вводится в поле \"Text\", шаблон - в поле \"Pattern\".<br>" +
                 "Длина вводимых строк не должна превышать " + TEXT_MAX_SIZE + " символов;<br>" +
-                "Слишком длинные строки обрезаются до максимально допустиимого размера.<br>" +
+                "Слишком длинные строки обрезаются до максимально допустимого размера.<br>" +
                 "Для того, чтобы сгенерировать визуализацию, необходимо нажать кнопку \"Visualize\".<br>" +
                 "Для автоматического показа визуализации нужно необходимо нажать кнопку \"Start\";<br>" +
                 "Для того, чтобы остановить автоматический показ, нажмите кнопку \"Pause\".<br>" +
@@ -55,7 +55,7 @@ public class MainGUI {
         infoLabel.setBounds(20, 20, FRAME_WIDTH-40, 160);
         infoLabel.setVerticalAlignment(SwingConstants.TOP);
         // Метка для ответа:
-        answerLabel = new JLabel(".");
+        answerLabel = new JLabel("");
         drawingPanel.add(answerLabel);
         answerLabel.setBounds(20, drawingPanel.getBounds().height-30, FRAME_WIDTH-40, 20);
         frame.repaint();
