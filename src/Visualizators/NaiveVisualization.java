@@ -45,8 +45,12 @@ public class NaiveVisualization extends Visualizable {
     private String NaiveAlgorithm(String text, String pattern) {
         int[] textColors = new int[text.length()]; // Хранит цвета символов текста
         int[] patternColors = new int[pattern.length()]; // Шаблона
+        int[] numerationColors = new int[text.length()]; // нумерации текста
         steps = new ArrayList<Step>();
         StringBuilder answer = new StringBuilder(); // Строка, хранящая результат работы алгоритма
+
+        for(int k=0; k<numerationColors.length; ++k)
+            numerationColors[k] = Color.BLACK.getRGB();
 
         for (int i = 0; i <= text.length() - pattern.length(); ++i) { // Перебор всех возможных вариантов вхождения шаблона в строку
             if(i!=0) {
@@ -56,14 +60,14 @@ public class NaiveVisualization extends Visualizable {
                 for (int k = 0; k < patternColors.length; ++k) { // Красим все символы шаблона в чёрный
                     patternColors[k] = Color.BLACK.getRGB();
                 }
-                steps.add(new Step(textColors, patternColors, i)); // Добавили изменения
+                steps.add(new Step(textColors, patternColors, i, numerationColors)); // Добавили изменения
             }
 
             int j=0;
             while(j<pattern.length() && pattern.charAt(j)==text.charAt(j+i)) { // Сравнение символов в соответствующих индексах
                 textColors[j+i]= Color.GREEN.getRGB(); // Покрасили совпавший символ в тексте зелёным
                 patternColors[j] = Color.GREEN.getRGB(); // Покрасили совпавший символ в шаблоне зелёным
-                steps.add(new Step(textColors, patternColors, i)); // Добавили изменения
+                steps.add(new Step(textColors, patternColors, i, numerationColors)); // Добавили изменения
                 j++;
             }
 
@@ -72,11 +76,14 @@ public class NaiveVisualization extends Visualizable {
                     answer.append(i);
                 else
                     answer.append(", "+i);
+                numerationColors[i]=Color.MAGENTA.getRGB(); // Красим найденный индекс в малиновый цвет
+                if(i+pattern.length()==text.length())
+                    steps.add(new Step(textColors, patternColors, i, numerationColors)); // Добавили изменения
             }
             else {
                 textColors[j+i]= Color.RED.getRGB(); // Покрасили не совпавший символ в тексте красным
                 patternColors[j] = Color.RED.getRGB(); // Покрасили не совпавший символ в шаблоне красным
-                steps.add(new Step(textColors, patternColors, i)); // Добавили изменения
+                steps.add(new Step(textColors, patternColors, i, numerationColors)); // Добавили изменения
             }
         }
 
@@ -108,18 +115,22 @@ public class NaiveVisualization extends Visualizable {
         for (int i = 0; i < labeledPattern.getElementsNumber(); i++) {
             labeledPattern.setColor(steps.get(step).patternColors[i], i);
         }
+        for(int i = 0; i < numeration.getElementsNumber(); ++i) {
+            numeration.setColor(steps.get(step).numerationColors[i], i);
+        }
         labeledPattern.setX(labeledText.getX() + labeledText.getElementSize()*steps.get(step).getPatternPosition());
     }
-
 
     class Step {
         private final int[] textColors; // Цвета символов текста
         private final int[] patternColors; // Цвета символов шаблона
+        private final int[] numerationColors; // Цвета индексов текста
         private final int patternPosition; // Позиция шаблона относительно символов текста
 
-        public Step(int[] textColors, int[] patternColors, int patternPosition) {
+        public Step(int[] textColors, int[] patternColors, int patternPosition, int[] numerationColors) {
             this.textColors = textColors.clone();
             this.patternColors = patternColors.clone();
+            this.numerationColors = numerationColors.clone();
             this.patternPosition = patternPosition;
         }
 

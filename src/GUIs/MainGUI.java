@@ -53,7 +53,7 @@ public class MainGUI {
                 "&emsp > Кнопка для перехода на следующий шаг - \"Next\", на предыдущий - \"Prev\"<br><br>" +
                 "</html>");
         drawingPanel.add(infoLabel);
-        infoLabel.setBounds(20, 20, FRAME_WIDTH-40, 240);
+        infoLabel.setBounds(15, 20, FRAME_WIDTH-40, 240);
         infoLabel.setVerticalAlignment(SwingConstants.TOP);
         // Метка для ответа:
         answerLabel = new JLabel("");
