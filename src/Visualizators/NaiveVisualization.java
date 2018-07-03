@@ -46,7 +46,7 @@ public class NaiveVisualization extends Visualizable {
         int[] textColors = new int[text.length()]; // Хранит цвета символов текста
         int[] patternColors = new int[pattern.length()]; // Шаблона
         int[] numerationColors = new int[text.length()]; // нумерации текста
-        steps = new ArrayList<Step>();
+        steps = new ArrayList<>();
         StringBuilder answer = new StringBuilder(); // Строка, хранящая результат работы алгоритма
 
         for(int k=0; k<numerationColors.length; ++k)
@@ -75,7 +75,7 @@ public class NaiveVisualization extends Visualizable {
                 if(answer.length()==0)
                     answer.append(i);
                 else
-                    answer.append(", "+i);
+                    answer.append(", ").append(i);
                 numerationColors[i]=Color.MAGENTA.getRGB(); // Красим найденный индекс в малиновый цвет
                 if(i+pattern.length()==text.length())
                     steps.add(new Step(textColors, patternColors, i, numerationColors)); // Добавили изменения
@@ -118,32 +118,20 @@ public class NaiveVisualization extends Visualizable {
         for(int i = 0; i < numeration.getElementsNumber(); ++i) {
             numeration.setColor(steps.get(step).numerationColors[i], i);
         }
-        labeledPattern.setX(labeledText.getX() + labeledText.getElementSize()*steps.get(step).getPatternPosition());
+        labeledPattern.setX(labeledText.getX() + labeledText.getElementSize()*steps.get(step).patternPosition);
     }
 
     class Step {
-        private final int[] textColors; // Цвета символов текста
-        private final int[] patternColors; // Цвета символов шаблона
-        private final int[] numerationColors; // Цвета индексов текста
-        private final int patternPosition; // Позиция шаблона относительно символов текста
+        final int[] textColors; // Цвета символов текста
+        final int[] patternColors; // Цвета символов шаблона
+        final int[] numerationColors; // Цвета индексов текста
+        final int patternPosition; // Позиция шаблона относительно символов текста
 
-        public Step(int[] textColors, int[] patternColors, int patternPosition, int[] numerationColors) {
+        Step(int[] textColors, int[] patternColors, int patternPosition, int[] numerationColors) {
             this.textColors = textColors.clone();
             this.patternColors = patternColors.clone();
             this.numerationColors = numerationColors.clone();
             this.patternPosition = patternPosition;
-        }
-
-        public int[] getTextColors() {
-            return textColors;
-        }
-
-        public int[] getPatternColors() {
-            return patternColors;
-        }
-
-        public int getPatternPosition() {
-            return patternPosition;
         }
     }
 }

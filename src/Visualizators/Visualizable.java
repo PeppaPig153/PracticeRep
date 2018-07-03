@@ -6,11 +6,19 @@ import GUIs.DrawingPanel;
  * Класс, описывающий абстрактный визуализатор
  */
 public abstract class Visualizable {
+    /**
+     * Функция, отображающая step шаг визуализации алгоритма
+     * @param step Шаг алгоритма, который необходимо отобразить
+     */
     public abstract void visualize(int step);
 
-    public abstract void clear();
     /**
-     * Визуализирующая функция для визуализатора алгоритма поиска подстроки в строке
+     * Функция, очищающая панель от помещенных на нее ранее функцией visualize(int) компонентов
+     */
+    public abstract void clear();
+
+    /**
+     * Конструктор для визуализатора алгоритма поиска подстроки в строке
      * @param text Строка
      * @param pattern Подстрока
      * @param panel Панель, на которой происходит визуализация
@@ -20,18 +28,27 @@ public abstract class Visualizable {
         this.pattern = pattern;
         this.panel = panel;
     }
+
+    /**
+     * Функция, возвращающая суммарное количество шагов алгоритма
+     * @return Суммарное количиество шагов алгоритма
+     */
     public int getStepsNumber() {
         return stepsNumber;
     }
 
+    /**
+     * Функция, возвращающая панель, на которой происходит отображение визуализации
+     * @return Панель, на которой происходит отображение визуализации
+     */
     public DrawingPanel getPanel() {
         return panel;
     }
 
-    protected String text;
-    protected String pattern;
-    protected String answer;
-    protected int stepsNumber;
+    protected String text; // Текст для алгоритма
+    protected String pattern; // Шаблон для алгоритма
+    protected String answer; // Ответ алгоритма
+    protected int stepsNumber; // Суммарное количество шагов алгоритма
 
-    private final DrawingPanel panel;
+    private final DrawingPanel panel; // Панель для визуализации
 }

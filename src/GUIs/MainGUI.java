@@ -4,8 +4,7 @@ import Visualizators.KMPVisualization;
 import Visualizators.NaiveVisualization;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.Objects;
 
 
 /**
@@ -65,44 +64,41 @@ public class MainGUI {
     // Функция инициализации обработчиков нажатий кнопок
     private void addActionListeners() {
         // Добавляем обработчик события при нажатии на кнопку Visualize:
-        visualizeButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (textField.getText().length() == 0 || patternField.getText().length() == 0) {
-                    JOptionPane.showMessageDialog(null, "One of fields is empty", "Error", JOptionPane.ERROR_MESSAGE);
-                } else {
-                    drawingPanel.remove(infoLabel); // Удаляем приветственное сообщение
-                    if (drawingPanel.getVisualization() != null) {
-                        // Очищаем окно от прошлой визуализации
-                        drawingPanel.getVisualization().clear();
-                        drawingPanel.revalidate();
-                        drawingPanel.repaint();
-                    }
-                    currentStep = -1;
-                    // Обрезаем строки, если они длиннее TEXT_MAX_SIZE символов
-                    if (textField.getText().length() > TEXT_MAX_SIZE || patternField.getText().length() > TEXT_MAX_SIZE) {
-                        JOptionPane.showMessageDialog(null, "Data will be cut off to 24 symbols", "Warning", JOptionPane.WARNING_MESSAGE);
-                    }
-                    String text = textField.getText().length()>TEXT_MAX_SIZE ?
-                            textField.getText().substring(0,TEXT_MAX_SIZE) : textField.getText();
-                    String pattern = patternField.getText().length()>TEXT_MAX_SIZE ?
-                            patternField.getText().substring(0,TEXT_MAX_SIZE) : patternField.getText();
-
-                    // Выбираем нужную визуализацию:
-                    if (comboBox.getSelectedItem().equals("Naive")) {
-                        NaiveVisualization naiveVisualization = new NaiveVisualization(text,
-                                pattern, drawingPanel, answerLabel);
-                        drawingPanel.setVisualization(naiveVisualization);
-                        stepsNumber = naiveVisualization.getStepsNumber();
-                    } else if (comboBox.getSelectedItem().equals("KMP")) {
-                        KMPVisualization kmpVisualization = new KMPVisualization(text,
-                                pattern, drawingPanel, answerLabel);
-                        drawingPanel.setVisualization(kmpVisualization);
-                        stepsNumber = kmpVisualization.getStepsNumber();
-                    }
+        visualizeButton.addActionListener(e -> {
+            if (textField.getText().length() == 0 || patternField.getText().length() == 0) {
+                JOptionPane.showMessageDialog(null, "One of fields is empty", "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                drawingPanel.remove(infoLabel); // Удаляем приветственное сообщение
+                if (drawingPanel.getVisualization() != null) {
+                    // Очищаем окно от прошлой визуализации
+                    drawingPanel.getVisualization().clear();
+                    drawingPanel.revalidate();
                     drawingPanel.repaint();
-                    update();
                 }
+                currentStep = -1;
+                // Обрезаем строки, если они длиннее TEXT_MAX_SIZE символов
+                if (textField.getText().length() > TEXT_MAX_SIZE || patternField.getText().length() > TEXT_MAX_SIZE) {
+                    JOptionPane.showMessageDialog(null, "Data will be cut off to 24 symbols", "Warning", JOptionPane.WARNING_MESSAGE);
+                }
+                String text = textField.getText().length()>TEXT_MAX_SIZE ?
+                        textField.getText().substring(0,TEXT_MAX_SIZE) : textField.getText();
+                String pattern = patternField.getText().length()>TEXT_MAX_SIZE ?
+                        patternField.getText().substring(0,TEXT_MAX_SIZE) : patternField.getText();
+
+                // Выбираем нужную визуализацию:
+                if (Objects.equals(comboBox.getSelectedItem(), "Naive")) {
+                    NaiveVisualization naiveVisualization = new NaiveVisualization(text,
+                            pattern, drawingPanel, answerLabel);
+                    drawingPanel.setVisualization(naiveVisualization);
+                    stepsNumber = naiveVisualization.getStepsNumber();
+                } else if (Objects.equals(comboBox.getSelectedItem(), "KMP")) {
+                    KMPVisualization kmpVisualization = new KMPVisualization(text,
+                            pattern, drawingPanel, answerLabel);
+                    drawingPanel.setVisualization(kmpVisualization);
+                    stepsNumber = kmpVisualization.getStepsNumber();
+                }
+                drawingPanel.repaint();
+                update();
             }
         });
         // Обработчик на нажатие кнопки Prev:
